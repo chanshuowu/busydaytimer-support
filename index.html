@@ -2,25 +2,692 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>BusyDay Timer Support</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BusyDay Timer Support</title>
+  <style>
+    :root {
+      color-scheme: dark light;
+      --bg: #0b0d10;
+      --panel: #151922;
+      --panel-soft: #11151c;
+      --text: #f7f8fa;
+      --muted: #aab2bf;
+      --line: #2a303b;
+      --accent: #28c7ba;
+      --accent-2: #5fa8ff;
+      --warning: #d4a72c;
+      --radius: 8px;
+      --shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f7f8fb;
+        --panel: #ffffff;
+        --panel-soft: #eef2f7;
+        --text: #101318;
+        --muted: #536071;
+        --line: #d9e0ea;
+        --shadow: 0 14px 34px rgba(16, 24, 40, 0.10);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--accent-2);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .wrap {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(14px);
+    }
+
+    nav {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      color: var(--accent);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 14px;
+      font-size: 0.92rem;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+    }
+
+    main {
+      padding-bottom: 56px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 420px);
+      gap: 36px;
+      align-items: center;
+      padding: 54px 0 36px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      line-height: 1.12;
+      letter-spacing: 0;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(2.45rem, 7vw, 5.4rem);
+      max-width: 780px;
+    }
+
+    h2 {
+      font-size: clamp(1.7rem, 4vw, 2.55rem);
+      margin-bottom: 18px;
+    }
+
+    h3 {
+      font-size: 1.12rem;
+      margin-bottom: 8px;
+    }
+
+    p {
+      margin: 0 0 14px;
+    }
+
+    .lead {
+      margin-top: 18px;
+      max-width: 720px;
+      color: var(--muted);
+      font-size: clamp(1.04rem, 2vw, 1.22rem);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      font-weight: 650;
+      box-shadow: var(--shadow);
+    }
+
+    .button.primary {
+      border-color: color-mix(in srgb, var(--accent) 56%, var(--line));
+      background: color-mix(in srgb, var(--accent) 20%, var(--panel));
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 26px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      background: var(--panel-soft);
+      border-radius: 999px;
+      padding: 6px 10px;
+    }
+
+    .hero-shot {
+      margin: 0;
+      justify-self: center;
+    }
+
+    .hero-shot img {
+      width: min(100%, 360px);
+      max-height: 780px;
+      object-fit: contain;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      display: block;
+      background: #000;
+    }
+
+    section {
+      padding: 34px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-intro {
+      color: var(--muted);
+      max-width: 780px;
+      margin-bottom: 22px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
+    }
+
+    .card p,
+    .faq p,
+    .support p {
+      color: var(--muted);
+    }
+
+    .steps {
+      counter-reset: step;
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .steps li {
+      counter-increment: step;
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 16px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .steps li::before {
+      content: counter(step);
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--accent-2) 18%, var(--panel-soft));
+      color: var(--text);
+      font-weight: 750;
+    }
+
+    .feature-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .feature-list li {
+      padding-left: 24px;
+      position: relative;
+      color: var(--muted);
+    }
+
+    .feature-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.68em;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .screenshots {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .shot {
+      margin: 0;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .shot img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #000;
+    }
+
+    .shot figcaption {
+      padding: 10px 12px 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .faq {
+      display: grid;
+      gap: 12px;
+    }
+
+    details {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 15px 16px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    details p {
+      margin-top: 10px;
+      margin-bottom: 0;
+    }
+
+    .support {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(240px, 0.85fr);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .contact-line {
+      margin: 16px 0 0;
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid color-mix(in srgb, var(--accent-2) 50%, var(--line));
+      background: color-mix(in srgb, var(--accent-2) 10%, var(--panel));
+      color: var(--text);
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 24px 0 42px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 860px) {
+      header {
+        position: static;
+      }
+
+      nav {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px 0;
+      }
+
+      .nav-links {
+        justify-content: flex-start;
+      }
+
+      .hero,
+      .support {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 34px;
+      }
+
+      .hero-shot {
+        justify-self: start;
+      }
+
+      .grid,
+      .grid.two,
+      .screenshots {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .wrap {
+        width: min(100% - 22px, 1120px);
+      }
+
+      .nav-links {
+        gap: 10px 12px;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero-actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .grid,
+      .grid.two,
+      .screenshots {
+        grid-template-columns: 1fr;
+      }
+
+      .steps li {
+        grid-template-columns: 34px 1fr;
+        padding: 14px;
+      }
+    }
+  </style>
 </head>
-<body style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 20px; line-height: 1.6;">
-  <h1>BusyDay Timer Support</h1>
+<body>
+  <header>
+    <nav class="wrap" aria-label="Support navigation">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">BT</span>
+        <span>BusyDay Timer Support</span>
+      </div>
+      <div class="nav-links">
+        <a href="#getting-started">Getting Started</a>
+        <a href="#timers">Timers</a>
+        <a href="#lock-watch-widgets">Lock Screen</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
 
-  <p>If you need help with BusyDay Timer, want to report a bug, send feedback, or request a feature, please contact:</p>
+  <main>
+    <div class="wrap hero">
+      <div>
+        <h1>BusyDay Timer</h1>
+        <p class="lead">A multi-timer board for busy days. Keep multiple timers, notes, and widgets in one clear place, with Lock Screen alerts, Apple Watch actions, widgets, Quiet Mode, and custom alarm sounds.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#getting-started">Get Help</a>
+          <a class="button" href="#contact">Contact Support</a>
+        </div>
+        <div class="meta" aria-label="App summary">
+          <span class="pill">Multiple timers</span>
+          <span class="pill">Lock Screen alerts</span>
+          <span class="pill">Apple Watch support</span>
+          <span class="pill">Widgets</span>
+        </div>
+      </div>
+      <figure class="hero-shot">
+        <img src="image01.jpeg" alt="BusyDay Timer Lock Screen snapshot with multiple timers and an Apple Watch timer example">
+      </figure>
+    </div>
 
-  <p><strong>Email:</strong> chanshuowu@icloud.com</p>
+    <section id="getting-started">
+      <div class="wrap">
+        <h2>Getting Started</h2>
+        <p class="section-intro">Use one board to manage multiple timers and notes. BusyDay Timer is designed for quick checks when your hands are full, your iPhone is locked, or you only have a moment to see what is next.</p>
+        <div class="grid">
+          <article class="card">
+            <h3>One Board</h3>
+            <p>Manage several timers at the same time from a single screen instead of switching between separate timers.</p>
+          </article>
+          <article class="card">
+            <h3>Fast Setup</h3>
+            <p>Use the wheel picker and saved timer bookmarks to set common timers quickly.</p>
+          </article>
+          <article class="card">
+            <h3>At a Glance</h3>
+            <p>Choose display styles and palettes so the timer board fits your day and remains easy to scan.</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-  <h2>Common support topics</h2>
-  <ul>
-    <li>Timer setup</li>
-    <li>Lock Screen and Live Activities</li>
-    <li>Apple Watch alarms</li>
-    <li>Custom alarm sounds</li>
-    <li>In-App Purchases and restore purchases</li>
-  </ul>
+    <section id="timers">
+      <div class="wrap">
+        <h2>How To Use Timers</h2>
+        <ol class="steps">
+          <li>
+            <div>
+              <h3>Set a timer</h3>
+              <p>Long-press a timer to open Timer Settings. Use the wheel and bookmarks to set timers quickly.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Start, pause, stop, or reset</h3>
+              <p>Tap a timer to start or pause it. Tap a ringing timer to stop it. Tap a finished timer to reset it.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Use saved timers</h3>
+              <p>Save common timer setups as bookmarks, then load them when you need the same timer again.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Customize the board</h3>
+              <p>Use display styles and color palettes to keep timers clear for your current workflow.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
 
-  <p>Developer: CS Wu</p>
+    <section id="lock-watch-widgets">
+      <div class="wrap">
+        <h2>Lock Screen, Apple Watch, And Widgets</h2>
+        <p class="section-intro">BusyDay Timer helps you stay aware even when you are not inside the app.</p>
+        <div class="grid">
+          <article class="card">
+            <h3>Lock Screen Alerts</h3>
+            <p>Check timer status from the Lock Screen snapshot. When a timer rings, you can stop it or add extra time right away.</p>
+          </article>
+          <article class="card">
+            <h3>Apple Watch</h3>
+            <p>Check the next timer on Apple Watch, and stop or add time when a timer rings.</p>
+          </article>
+          <article class="card">
+            <h3>Widgets</h3>
+            <p>Add timer widgets to check your timers from the Home Screen.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="quiet-sounds">
+      <div class="wrap">
+        <h2>Quiet Mode And Custom Sounds</h2>
+        <div class="grid two">
+          <article class="card">
+            <h3>Quiet Mode</h3>
+            <p>Turn on Quiet Mode for softer alerts in shared spaces, offices, classrooms, kitchens, or other places where loud alarms may be awkward. On Apple Watch, use the Watch's own Silent Mode.</p>
+          </article>
+          <article class="card">
+            <h3>Custom Alarm Sounds</h3>
+            <p>Record your own alarm sound for each timer so different timers can use different alerts.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="privacy">
+      <div class="wrap">
+        <h2>Privacy Note</h2>
+        <div class="card">
+          <p>For privacy on shared or locked screens, use private Lock Screen snapshots to hide timer details when you do not want others to see your task names.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="screenshots">
+      <div class="wrap">
+        <h2>Visual Examples</h2>
+        <p class="section-intro">These screenshots show the main timer board, setup controls, Lock Screen actions, Watch actions, display options, and language settings.</p>
+        <div class="screenshots">
+          <figure class="shot">
+            <img src="image01.jpeg" alt="BusyDay Timer showing multiple timers on an iPhone Lock Screen with Apple Watch quick actions">
+            <figcaption>Lock Screen snapshot and Watch example</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="image02.jpeg" alt="BusyDay Timer Lock Screen alert with custom sound, add time, and stop controls">
+            <figcaption>Custom sounds and quick actions</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="image03.jpeg" alt="BusyDay Timer main board with several colored timers and notes">
+            <figcaption>One board for every timer</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="image04.jpeg" alt="BusyDay Timer palette menu showing timer color theme choices">
+            <figcaption>Timer palettes</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="image05.jpeg" alt="BusyDay Timer privacy and Quiet Mode settings with private Lock Screen snapshot example">
+            <figcaption>Private and quiet settings</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="image06.jpeg" alt="BusyDay Timer settings showing wheel picker, timer bookmarks, and saved timer loading">
+            <figcaption>Fast timer setup</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="image07.jpeg" alt="BusyDay Timer display style menu with expanded mode, light mode, and widgets">
+            <figcaption>Display styles and widgets</figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="image08.jpeg" alt="BusyDay Timer language menu with supported language options">
+            <figcaption>Language settings</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="wrap">
+        <h2>FAQ</h2>
+        <div class="faq">
+          <details>
+            <summary>How do I set a timer quickly?</summary>
+            <p>Long-press a timer to open Timer Settings. Use the wheel picker, or load a saved timer bookmark for a common timer.</p>
+          </details>
+          <details>
+            <summary>How do I control a running or ringing timer?</summary>
+            <p>Tap a timer to start or pause it. Tap a ringing timer to stop it. Tap a finished timer to reset it.</p>
+          </details>
+          <details>
+            <summary>Can I use different sounds for different timers?</summary>
+            <p>Yes. BusyDay Timer supports custom alarm sounds, including recording your own alert sound for each timer.</p>
+          </details>
+          <details>
+            <summary>How can I make alerts less disruptive?</summary>
+            <p>Turn on Quiet Mode for softer alerts. On Apple Watch, use the Watch's own Silent Mode.</p>
+          </details>
+          <details>
+            <summary>Can timer details be hidden on the Lock Screen?</summary>
+            <p>Yes. Use private Lock Screen snapshots to hide timer details when you do not want others to see your task names.</p>
+          </details>
+          <details>
+            <summary>Does BusyDay Timer support multiple languages?</summary>
+            <p>Yes. The app lets you switch between supported languages anytime.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="wrap support">
+        <div class="card">
+          <h2>Contact / Support</h2>
+          <p>If you need help with BusyDay Timer, include your iPhone model, iOS version, and a short description of what happened.</p>
+          <!-- Replace your-email@example.com with your real support email before publishing this page. -->
+          <p class="contact-line">Support: chanshuowu@icloud.com</p>
+        </div>
+        <aside class="card">
+          <h3>App Details</h3>
+          <ul class="feature-list">
+            <li>App name: BusyDay Timer</li>
+            <li>Developer: CS Wu</li>
+            <li>Copyright: 2026 Chan Shuo Wu</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      BusyDay Timer support page. This page is focused on app help, common usage questions, and support contact information.
+    </div>
+  </footer>
 </body>
 </html>

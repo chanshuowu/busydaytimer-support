@@ -4,32 +4,43 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>BusyDay Timer Support</title>
+  <meta name="description" content="Support page for BusyDay Timer, a multi-timer board with Lock Screen alerts, Apple Watch actions, widgets, Quiet Mode, custom sounds, and privacy controls.">
+  <meta name="color-scheme" content="dark light">
   <style>
     :root {
       color-scheme: dark light;
-      --bg: #0b0d10;
-      --panel: #151922;
-      --panel-soft: #11151c;
-      --text: #f7f8fa;
-      --muted: #aab2bf;
-      --line: #2a303b;
-      --accent: #28c7ba;
-      --accent-2: #5fa8ff;
-      --warning: #d4a72c;
+      --bg: #080a0d;
+      --surface: #11151b;
+      --surface-2: #171d25;
+      --surface-3: #202733;
+      --text: #f5f7fa;
+      --muted: #adb7c5;
+      --subtle: #7f8b9b;
+      --line: #2c3441;
+      --accent: #2fc7b8;
+      --accent-2: #5ba8ff;
+      --accent-3: #d55b8d;
+      --accent-4: #d4a33f;
+      --good: #7dcf65;
+      --danger: #ff6678;
+      --shadow: 0 18px 46px rgba(0, 0, 0, 0.28);
       --radius: 8px;
-      --shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+      --nav-h: 72px;
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      text-rendering: optimizeLegibility;
     }
 
     @media (prefers-color-scheme: light) {
       :root {
-        --bg: #f7f8fb;
-        --panel: #ffffff;
-        --panel-soft: #eef2f7;
-        --text: #101318;
-        --muted: #536071;
-        --line: #d9e0ea;
-        --shadow: 0 14px 34px rgba(16, 24, 40, 0.10);
+        --bg: #f5f7fa;
+        --surface: #ffffff;
+        --surface-2: #edf2f7;
+        --surface-3: #e4ebf3;
+        --text: #11151b;
+        --muted: #536173;
+        --subtle: #69768a;
+        --line: #d5dde8;
+        --shadow: 0 16px 38px rgba(18, 27, 38, 0.12);
       }
     }
 
@@ -43,10 +54,10 @@
 
     body {
       margin: 0;
-      background: var(--bg);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--surface-2) 18%, var(--bg)), var(--bg) 420px);
       color: var(--text);
       font-size: 16px;
-      line-height: 1.6;
+      line-height: 1.55;
     }
 
     a {
@@ -58,71 +69,134 @@
       text-decoration: underline;
     }
 
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
     .wrap {
-      width: min(1120px, calc(100% - 32px));
+      width: min(1160px, calc(100% - 34px));
       margin: 0 auto;
     }
 
     header {
-      border-bottom: 1px solid var(--line);
-      background: color-mix(in srgb, var(--bg) 92%, transparent);
       position: sticky;
       top: 0;
-      z-index: 10;
-      backdrop-filter: blur(14px);
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(18px);
     }
 
     nav {
-      min-height: 64px;
+      min-height: var(--nav-h);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      gap: 18px;
     }
 
     .brand {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 12px;
       min-width: 0;
-      font-weight: 700;
-      letter-spacing: 0;
+      color: var(--text);
+      font-weight: 750;
     }
 
     .brand-mark {
-      width: 34px;
-      height: 34px;
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
       border-radius: 8px;
       display: grid;
       place-items: center;
-      background: var(--panel);
       border: 1px solid var(--line);
-      color: var(--accent);
+      background:
+        linear-gradient(140deg, color-mix(in srgb, var(--accent) 28%, var(--surface)), var(--surface)),
+        var(--surface);
+      color: var(--text);
+      font-weight: 850;
       box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+
+    .brand span:last-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 14px;
+      min-width: 0;
     }
 
     .nav-links {
       display: flex;
       flex-wrap: wrap;
       justify-content: flex-end;
-      gap: 14px;
+      gap: 10px 14px;
       font-size: 0.92rem;
     }
 
     .nav-links a {
       color: var(--muted);
+      font-weight: 620;
+    }
+
+    .language-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 184px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 7px 9px;
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .language-control label {
+      color: var(--subtle);
+      font-size: 0.84rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    select {
+      width: 100%;
+      min-width: 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      font-size: 0.92rem;
+      outline: none;
     }
 
     main {
-      padding-bottom: 56px;
+      padding-bottom: 62px;
     }
 
     .hero {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(260px, 420px);
-      gap: 36px;
+      grid-template-columns: minmax(0, 1fr) minmax(270px, 420px);
+      gap: 42px;
       align-items: center;
-      padding: 54px 0 36px;
+      padding: 58px 0 38px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 0.9rem;
+      font-weight: 800;
+      letter-spacing: 0;
+      margin: 0 0 12px;
+      text-transform: uppercase;
     }
 
     h1,
@@ -134,17 +208,17 @@
     }
 
     h1 {
-      font-size: clamp(2.45rem, 7vw, 5.4rem);
-      max-width: 780px;
+      font-size: 5rem;
+      max-width: 820px;
     }
 
     h2 {
-      font-size: clamp(1.7rem, 4vw, 2.55rem);
-      margin-bottom: 18px;
+      font-size: 2.45rem;
+      margin-bottom: 14px;
     }
 
     h3 {
-      font-size: 1.12rem;
+      font-size: 1.08rem;
       margin-bottom: 8px;
     }
 
@@ -154,9 +228,9 @@
 
     .lead {
       margin-top: 18px;
-      max-width: 720px;
+      max-width: 740px;
       color: var(--muted);
-      font-size: clamp(1.04rem, 2vw, 1.22rem);
+      font-size: 1.18rem;
     }
 
     .hero-actions {
@@ -170,22 +244,28 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 44px;
+      gap: 8px;
+      min-height: 46px;
       padding: 10px 16px;
-      border-radius: 8px;
+      border-radius: var(--radius);
       border: 1px solid var(--line);
-      background: var(--panel);
+      background: var(--surface);
       color: var(--text);
-      font-weight: 650;
+      font-weight: 750;
       box-shadow: var(--shadow);
     }
 
     .button.primary {
-      border-color: color-mix(in srgb, var(--accent) 56%, var(--line));
-      background: color-mix(in srgb, var(--accent) 20%, var(--panel));
+      border-color: color-mix(in srgb, var(--accent) 58%, var(--line));
+      background: color-mix(in srgb, var(--accent) 22%, var(--surface));
     }
 
-    .meta {
+    .button.secondary {
+      border-color: color-mix(in srgb, var(--accent-2) 46%, var(--line));
+      background: color-mix(in srgb, var(--accent-2) 12%, var(--surface));
+    }
+
+    .summary-pills {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
@@ -196,36 +276,67 @@
 
     .pill {
       border: 1px solid var(--line);
-      background: var(--panel-soft);
+      background: color-mix(in srgb, var(--surface-2) 84%, transparent);
       border-radius: 999px;
-      padding: 6px 10px;
+      padding: 7px 11px;
     }
 
-    .hero-shot {
+    .hero-media {
       margin: 0;
       justify-self: center;
+      position: relative;
     }
 
-    .hero-shot img {
+    .hero-media img {
       width: min(100%, 360px);
-      max-height: 780px;
+      height: auto;
+      aspect-ratio: 207 / 448;
       object-fit: contain;
-      border-radius: 8px;
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
       display: block;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
       background: #000;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-note {
+      position: absolute;
+      left: -28px;
+      bottom: 24px;
+      width: min(240px, 64%);
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: color-mix(in srgb, var(--surface) 88%, transparent);
+      color: var(--muted);
+      font-size: 0.9rem;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
     }
 
     section {
-      padding: 34px 0;
+      padding: 38px 0;
       border-top: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(220px, 360px);
+      gap: 28px;
+      align-items: end;
+      margin-bottom: 24px;
     }
 
     .section-intro {
       color: var(--muted);
       max-width: 780px;
-      margin-bottom: 22px;
+      margin-bottom: 0;
+    }
+
+    .section-note {
+      color: var(--subtle);
+      font-size: 0.95rem;
+      margin-bottom: 0;
     }
 
     .grid {
@@ -239,7 +350,7 @@
     }
 
     .card {
-      background: var(--panel);
+      background: color-mix(in srgb, var(--surface) 94%, transparent);
       border: 1px solid var(--line);
       border-radius: var(--radius);
       padding: 18px;
@@ -250,6 +361,18 @@
     .faq p,
     .support p {
       color: var(--muted);
+    }
+
+    .card.accent-a {
+      border-top: 3px solid var(--accent);
+    }
+
+    .card.accent-b {
+      border-top: 3px solid var(--accent-2);
+    }
+
+    .card.accent-c {
+      border-top: 3px solid var(--accent-3);
     }
 
     .steps {
@@ -268,7 +391,7 @@
       gap: 12px;
       align-items: start;
       padding: 16px;
-      background: var(--panel);
+      background: var(--surface);
       border: 1px solid var(--line);
       border-radius: var(--radius);
     }
@@ -279,13 +402,14 @@
       height: 34px;
       display: grid;
       place-items: center;
-      border-radius: 8px;
-      background: color-mix(in srgb, var(--accent-2) 18%, var(--panel-soft));
+      border-radius: var(--radius);
+      background: color-mix(in srgb, var(--accent-2) 18%, var(--surface-2));
       color: var(--text);
-      font-weight: 750;
+      font-weight: 800;
     }
 
-    .feature-list {
+    .feature-list,
+    .detail-list {
       display: grid;
       gap: 12px;
       margin: 0;
@@ -293,13 +417,15 @@
       list-style: none;
     }
 
-    .feature-list li {
+    .feature-list li,
+    .detail-list li {
       padding-left: 24px;
       position: relative;
       color: var(--muted);
     }
 
-    .feature-list li::before {
+    .feature-list li::before,
+    .detail-list li::before {
       content: "";
       position: absolute;
       left: 0;
@@ -310,6 +436,32 @@
       background: var(--accent);
     }
 
+    .detail-list li:nth-child(2n)::before {
+      background: var(--accent-2);
+    }
+
+    .detail-list li:nth-child(3n)::before {
+      background: var(--accent-3);
+    }
+
+    .trouble-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .trouble-item {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .trouble-item strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
     .screenshots {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -318,7 +470,7 @@
 
     .shot {
       margin: 0;
-      background: var(--panel);
+      background: var(--surface);
       border: 1px solid var(--line);
       border-radius: var(--radius);
       overflow: hidden;
@@ -328,6 +480,8 @@
       display: block;
       width: 100%;
       height: auto;
+      aspect-ratio: 207 / 448;
+      object-fit: contain;
       background: #000;
     }
 
@@ -343,7 +497,7 @@
     }
 
     details {
-      background: var(--panel);
+      background: var(--surface);
       border: 1px solid var(--line);
       border-radius: var(--radius);
       padding: 15px 16px;
@@ -351,7 +505,7 @@
 
     summary {
       cursor: pointer;
-      font-weight: 700;
+      font-weight: 750;
     }
 
     details p {
@@ -361,7 +515,7 @@
 
     .support {
       display: grid;
-      grid-template-columns: minmax(0, 1.5fr) minmax(240px, 0.85fr);
+      grid-template-columns: minmax(0, 1.45fr) minmax(240px, 0.85fr);
       gap: 14px;
       align-items: start;
     }
@@ -369,12 +523,16 @@
     .contact-line {
       margin: 16px 0 0;
       padding: 14px;
-      border-radius: 8px;
+      border-radius: var(--radius);
       border: 1px solid color-mix(in srgb, var(--accent-2) 50%, var(--line));
-      background: color-mix(in srgb, var(--accent-2) 10%, var(--panel));
+      background: color-mix(in srgb, var(--accent-2) 10%, var(--surface));
       color: var(--text);
-      font-weight: 700;
+      font-weight: 750;
       overflow-wrap: anywhere;
+    }
+
+    .privacy-copy p:last-child {
+      margin-bottom: 0;
     }
 
     footer {
@@ -384,23 +542,34 @@
       font-size: 0.92rem;
     }
 
-    @media (max-width: 860px) {
-      header {
-        position: static;
-      }
+    [data-i18n] {
+      overflow-wrap: anywhere;
+    }
 
+    @media (max-width: 980px) {
       nav {
         align-items: flex-start;
         flex-direction: column;
         padding: 14px 0;
       }
 
+      .nav-actions {
+        width: 100%;
+        align-items: flex-start;
+        justify-content: space-between;
+      }
+
       .nav-links {
         justify-content: flex-start;
       }
 
+      .language-control {
+        min-width: 170px;
+      }
+
       .hero,
-      .support {
+      .support,
+      .section-head {
         grid-template-columns: 1fr;
       }
 
@@ -408,28 +577,61 @@
         padding-top: 34px;
       }
 
-      .hero-shot {
+      h1 {
+        font-size: 3.8rem;
+      }
+
+      h2 {
+        font-size: 2.15rem;
+      }
+
+      .hero-media {
         justify-self: start;
+      }
+
+      .hero-note {
+        left: 16px;
+        bottom: 16px;
       }
 
       .grid,
       .grid.two,
-      .screenshots {
+      .screenshots,
+      .trouble-grid {
         grid-template-columns: 1fr 1fr;
       }
     }
 
-    @media (max-width: 560px) {
+    @media (max-width: 620px) {
       .wrap {
-        width: min(100% - 22px, 1120px);
+        width: min(100% - 22px, 1160px);
+      }
+
+      .nav-actions {
+        gap: 12px;
+        flex-direction: column-reverse;
+      }
+
+      .language-control {
+        width: 100%;
       }
 
       .nav-links {
-        gap: 10px 12px;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
       }
 
       h1 {
         font-size: 2.5rem;
+      }
+
+      h2 {
+        font-size: 1.72rem;
+      }
+
+      .lead {
+        font-size: 1.04rem;
       }
 
       .hero-actions {
@@ -443,7 +645,8 @@
 
       .grid,
       .grid.two,
-      .screenshots {
+      .screenshots,
+      .trouble-grid {
         grid-template-columns: 1fr;
       }
 
@@ -456,90 +659,137 @@
 </head>
 <body>
   <header>
-    <nav class="wrap" aria-label="Support navigation">
-      <div class="brand">
+    <nav class="wrap" aria-label="Support navigation" data-i18n-attr="aria-label:navAria">
+      <a class="brand" href="#top" aria-label="BusyDay Timer Support" data-i18n-attr="aria-label:brand">
         <span class="brand-mark" aria-hidden="true">BT</span>
-        <span>BusyDay Timer Support</span>
-      </div>
-      <div class="nav-links">
-        <a href="#getting-started">Getting Started</a>
-        <a href="#timers">Timers</a>
-        <a href="#lock-watch-widgets">Lock Screen</a>
-        <a href="#privacy">Privacy</a>
-        <a href="#faq">FAQ</a>
-        <a href="#contact">Contact</a>
+        <span data-i18n="brand">BusyDay Timer Support</span>
+      </a>
+      <div class="nav-actions">
+        <div class="nav-links">
+          <a href="#quick-help" data-i18n="navQuickHelp">Quick Help</a>
+          <a href="#how-to" data-i18n="navHowTo">How To Use</a>
+          <a href="#troubleshooting" data-i18n="navTroubleshooting">Troubleshooting</a>
+          <a href="#privacy" data-i18n="navPrivacy">Privacy</a>
+          <a href="#faq" data-i18n="navFaq">FAQ</a>
+          <a href="#contact" data-i18n="navContact">Contact</a>
+        </div>
+        <div class="language-control">
+          <label for="language" data-i18n="languageLabel">Language</label>
+          <select id="language" aria-label="Language" data-i18n-attr="aria-label:languageLabel">
+            <option value="en">English</option>
+            <option value="zh-Hans">简体中文</option>
+            <option value="zh-Hant">繁體中文</option>
+            <option value="ja">日本語</option>
+            <option value="ko">한국어</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+            <option value="pt">Português</option>
+            <option value="ru">Русский</option>
+          </select>
+        </div>
       </div>
     </nav>
   </header>
 
-  <main>
+  <main id="top">
     <div class="wrap hero">
       <div>
-        <h1>BusyDay Timer</h1>
-        <p class="lead">A multi-timer board for busy days. Keep multiple timers, notes, and widgets in one clear place, with Lock Screen alerts, Apple Watch actions, widgets, Quiet Mode, and custom alarm sounds.</p>
+        <p class="eyebrow" data-i18n="heroEyebrow">App Support</p>
+        <h1 data-i18n="heroTitle">BusyDay Timer</h1>
+        <p class="lead" data-i18n="heroLead">Multiple alarm timers for busy days. Manage them on one board, check status from the Lock Screen, and use Apple Watch actions when a timer needs attention.</p>
         <div class="hero-actions">
-          <a class="button primary" href="#getting-started">Get Help</a>
-          <a class="button" href="#contact">Contact Support</a>
+          <a class="button primary" href="https://apps.apple.com/sg/app/busyday-timer/id6763252662" data-i18n="appStoreButton">View on the App Store</a>
+          <a class="button secondary" href="mailto:chanshuowu@icloud.com" data-i18n="contactButton">Contact Support</a>
         </div>
-        <div class="meta" aria-label="App summary">
-          <span class="pill">Multiple timers</span>
-          <span class="pill">Lock Screen alerts</span>
-          <span class="pill">Apple Watch support</span>
-          <span class="pill">Widgets</span>
+        <div class="summary-pills" aria-label="App summary" data-i18n-attr="aria-label:summaryAria">
+          <span class="pill" data-i18n="pillTimers">Multiple timers</span>
+          <span class="pill" data-i18n="pillLock">Lock Screen alerts</span>
+          <span class="pill" data-i18n="pillWatch">Apple Watch actions</span>
+          <span class="pill" data-i18n="pillPrivacy">Private snapshots</span>
         </div>
       </div>
-      <figure class="hero-shot">
-        <img src="image01.jpeg" alt="BusyDay Timer Lock Screen snapshot with multiple timers and an Apple Watch timer example">
+      <figure class="hero-media">
+        <img src="images/en/image01.jpeg" width="621" height="1344" fetchpriority="high" decoding="async" data-shot="1" alt="BusyDay Timer Lock Screen snapshot with multiple timers and Apple Watch example" data-i18n-attr="alt:heroImageAlt">
+        <figcaption class="hero-note" data-i18n="heroNote">Need help fast? Start with Quick Help, then send your iPhone model and iOS version if you contact support.</figcaption>
       </figure>
     </div>
 
-    <section id="getting-started">
+    <section id="quick-help">
       <div class="wrap">
-        <h2>Getting Started</h2>
-        <p class="section-intro">Use one board to manage multiple timers and notes. BusyDay Timer is designed for quick checks when your hands are full, your iPhone is locked, or you only have a moment to see what is next.</p>
+        <div class="section-head">
+          <div>
+            <h2 data-i18n="quickTitle">Quick Help</h2>
+            <p class="section-intro" data-i18n="quickIntro">Use one board to manage multiple timers and notes. These are the features most people need first.</p>
+          </div>
+          <p class="section-note" data-i18n="quickNote">BusyDay Timer works fully on iPhone. Apple Watch adds wrist alerts and quick actions.</p>
+        </div>
         <div class="grid">
-          <article class="card">
-            <h3>One Board</h3>
-            <p>Manage several timers at the same time from a single screen instead of switching between separate timers.</p>
+          <article class="card accent-a">
+            <h3 data-i18n="quickTimerTitle">Set a Timer</h3>
+            <p data-i18n="quickTimerBody">Long-press a timer to open Timer Settings. Use the wheel and bookmarks to set timers quickly.</p>
           </article>
-          <article class="card">
-            <h3>Fast Setup</h3>
-            <p>Use the wheel picker and saved timer bookmarks to set common timers quickly.</p>
+          <article class="card accent-b">
+            <h3 data-i18n="quickLockTitle">Lock Screen</h3>
+            <p data-i18n="quickLockBody">When your iPhone is locked, you can still check timer status. When a timer rings, stop it or add extra time from the alert.</p>
           </article>
-          <article class="card">
-            <h3>At a Glance</h3>
-            <p>Choose display styles and palettes so the timer board fits your day and remains easy to scan.</p>
+          <article class="card accent-c">
+            <h3 data-i18n="quickWatchTitle">Apple Watch</h3>
+            <p data-i18n="quickWatchBody">Check the next timer on Apple Watch. When a timer rings, you can stop it or add extra time.</p>
+          </article>
+          <article class="card accent-b">
+            <h3 data-i18n="quickSoundsTitle">Custom Sounds</h3>
+            <p data-i18n="quickSoundsBody">Record your own alarm sound for each timer so different timers can use different alerts.</p>
+          </article>
+          <article class="card accent-c">
+            <h3 data-i18n="quickQuietTitle">Quiet Mode</h3>
+            <p data-i18n="quickQuietBody">Turn on Quiet Mode for softer alerts in shared spaces. On Apple Watch, use the watch's own Silent Mode.</p>
+          </article>
+          <article class="card accent-a">
+            <h3 data-i18n="quickWidgetsTitle">Widgets</h3>
+            <p data-i18n="quickWidgetsBody">Add timer widgets to check your timers from the Home Screen without opening the app.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <section id="timers">
+    <section id="how-to">
       <div class="wrap">
-        <h2>How To Use Timers</h2>
+        <div class="section-head">
+          <div>
+            <h2 data-i18n="howTitle">How To Use</h2>
+            <p class="section-intro" data-i18n="howIntro">The core workflow is simple: set timers, keep the board visible, and use quick controls when something needs attention.</p>
+          </div>
+        </div>
         <ol class="steps">
           <li>
             <div>
-              <h3>Set a timer</h3>
-              <p>Long-press a timer to open Timer Settings. Use the wheel and bookmarks to set timers quickly.</p>
+              <h3 data-i18n="howStep1Title">Set a timer</h3>
+              <p data-i18n="howStep1Body">Long-press a timer to open Timer Settings. Use the wheel picker, quick duration buttons, and saved bookmarks.</p>
             </div>
           </li>
           <li>
             <div>
-              <h3>Start, pause, stop, or reset</h3>
-              <p>Tap a timer to start or pause it. Tap a ringing timer to stop it. Tap a finished timer to reset it.</p>
+              <h3 data-i18n="howStep2Title">Control timers</h3>
+              <p data-i18n="howStep2Body">Tap a timer to start or pause it. Tap a ringing timer to stop it. Tap a finished timer to reset it.</p>
             </div>
           </li>
           <li>
             <div>
-              <h3>Use saved timers</h3>
-              <p>Save common timer setups as bookmarks, then load them when you need the same timer again.</p>
+              <h3 data-i18n="howStep3Title">Use saved timers</h3>
+              <p data-i18n="howStep3Body">Save common timer setups as bookmarks, then load them when you need the same timer again.</p>
             </div>
           </li>
           <li>
             <div>
-              <h3>Customize the board</h3>
-              <p>Use display styles and color palettes to keep timers clear for your current workflow.</p>
+              <h3 data-i18n="howStep4Title">Keep status visible</h3>
+              <p data-i18n="howStep4Body">Start a timer, lock your iPhone, and confirm the timer board appears on the Lock Screen snapshot.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3 data-i18n="howStep5Title">Tune the board</h3>
+              <p data-i18n="howStep5Body">Use Display settings to choose the snapshot style, board appearance, palettes, and whether timer titles stay private.</p>
             </div>
           </li>
         </ol>
@@ -548,92 +798,126 @@
 
     <section id="lock-watch-widgets">
       <div class="wrap">
-        <h2>Lock Screen, Apple Watch, And Widgets</h2>
-        <p class="section-intro">BusyDay Timer helps you stay aware even when you are not inside the app.</p>
+        <div class="section-head">
+          <div>
+            <h2 data-i18n="lockTitle">Lock Screen, Apple Watch, And Widgets</h2>
+            <p class="section-intro" data-i18n="lockIntro">BusyDay Timer is built for moments when you cannot keep opening the app.</p>
+          </div>
+        </div>
         <div class="grid">
           <article class="card">
-            <h3>Lock Screen Alerts</h3>
-            <p>Check timer status from the Lock Screen snapshot. When a timer rings, you can stop it or add extra time right away.</p>
+            <h3 data-i18n="lockCardTitle">Lock Screen Snapshot</h3>
+            <p data-i18n="lockCardBody">Use the snapshot to check timer status while your iPhone is locked. Snapshot buttons can pause, resume, stop, or add time when available.</p>
           </article>
           <article class="card">
-            <h3>Apple Watch</h3>
-            <p>Check the next timer on Apple Watch, and stop or add time when a timer rings.</p>
+            <h3 data-i18n="watchCardTitle">Apple Watch</h3>
+            <p data-i18n="watchCardBody">If you use Apple Watch, check the Smart Stack timer view and action button while a timer is active.</p>
           </article>
           <article class="card">
-            <h3>Widgets</h3>
-            <p>Add timer widgets to check your timers from the Home Screen.</p>
+            <h3 data-i18n="widgetCardTitle">Home Screen Widgets</h3>
+            <p data-i18n="widgetCardBody">To add a widget, touch and hold the Home Screen, tap Edit, tap Add Widget, then search for BusyDay Timer.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <section id="quiet-sounds">
+    <section id="troubleshooting">
       <div class="wrap">
-        <h2>Quiet Mode And Custom Sounds</h2>
-        <div class="grid two">
-          <article class="card">
-            <h3>Quiet Mode</h3>
-            <p>Turn on Quiet Mode for softer alerts in shared spaces, offices, classrooms, kitchens, or other places where loud alarms may be awkward. On Apple Watch, use the Watch's own Silent Mode.</p>
-          </article>
-          <article class="card">
-            <h3>Custom Alarm Sounds</h3>
-            <p>Record your own alarm sound for each timer so different timers can use different alerts.</p>
-          </article>
+        <div class="section-head">
+          <div>
+            <h2 data-i18n="troubleTitle">Troubleshooting</h2>
+            <p class="section-intro" data-i18n="troubleIntro">Try these checks before contacting support. They cover the most common timer, Lock Screen, Watch, sound, widget, and language issues.</p>
+          </div>
+        </div>
+        <div class="trouble-grid">
+          <div class="trouble-item">
+            <strong data-i18n="troubleLockTitle">Lock Screen snapshot is not visible</strong>
+            <p data-i18n="troubleLockBody">Start at least one timer, lock your iPhone, and wait a moment. If the snapshot is still missing, confirm Live Activities and notifications are allowed for BusyDay Timer in iOS Settings.</p>
+          </div>
+          <div class="trouble-item">
+            <strong data-i18n="troubleWatchTitle">Apple Watch controls are not appearing</strong>
+            <p data-i18n="troubleWatchBody">Keep the iPhone app installed and paired with your watch. Start a timer on iPhone, then check the Smart Stack or timer alert on Apple Watch.</p>
+          </div>
+          <div class="trouble-item">
+            <strong data-i18n="troubleSoundTitle">Alerts are too loud or too soft</strong>
+            <p data-i18n="troubleSoundBody">Use Quiet Mode for softer alerts. For Watch alerts, use Apple Watch Silent Mode or adjust haptics in Watch settings.</p>
+          </div>
+          <div class="trouble-item">
+            <strong data-i18n="troubleWidgetTitle">Widgets do not update immediately</strong>
+            <p data-i18n="troubleWidgetBody">iOS controls widget refresh timing. Open BusyDay Timer once, confirm the timer is running, then give the widget a moment to refresh.</p>
+          </div>
+          <div class="trouble-item">
+            <strong data-i18n="troublePrivateTitle">Timer details show on the Lock Screen</strong>
+            <p data-i18n="troublePrivateBody">Open Display settings and choose a private snapshot style when you do not want task names visible on a locked or shared screen.</p>
+          </div>
+          <div class="trouble-item">
+            <strong data-i18n="troubleLanguageTitle">Wrong language is shown</strong>
+            <p data-i18n="troubleLanguageBody">Open the app's language menu and choose System Default or a specific language. This support page also has its own language selector at the top.</p>
+          </div>
         </div>
       </div>
     </section>
 
     <section id="privacy">
       <div class="wrap">
-        <h2>Privacy Policy</h2>
-        <p class="section-intro">Last updated: May 4, 2026</p>
-        <div class="card">
-          <p>BusyDay Timer does not collect, sell, or share personal data.</p>
-          <p>Timer names, notes, settings, preferences, custom alarm sounds, and saved timers are stored locally on the user's device and are not sent to the developer.</p>
-          <p>BusyDay Timer does not use third-party analytics, advertising SDKs, tracking SDKs, or account login services.</p>
-          <p>Apple services such as iCloud, TestFlight, App Store purchases, crash reports, and Apple Watch synchronization are provided by Apple and are subject to Apple's privacy practices.</p>
-          <p>For support, contact <a href="mailto:chanshuowu@icloud.com">chanshuowu@icloud.com</a>. Information included in support emails is used only to respond to the request.</p>
-          <p>For privacy on shared or locked screens, BusyDay Timer also includes private Lock Screen snapshots to hide timer details when you do not want others to see your task names.</p>
+        <div class="section-head">
+          <div>
+            <h2 data-i18n="privacyTitle">Privacy Policy</h2>
+            <p class="section-intro" data-i18n="privacyDate">Last updated: May 4, 2026</p>
+          </div>
+          <p class="section-note" data-i18n="privacyNote">BusyDay Timer is designed to keep your timer data local to your device.</p>
+        </div>
+        <div class="card privacy-copy">
+          <p data-i18n="privacyP1">BusyDay Timer does not collect, sell, or share personal data.</p>
+          <p data-i18n="privacyP2">Timer names, notes, settings, preferences, custom alarm sounds, and saved timers are stored locally on the user's device and are not sent to the developer.</p>
+          <p data-i18n="privacyP3">BusyDay Timer does not use third-party analytics, advertising SDKs, tracking SDKs, or account login services.</p>
+          <p data-i18n="privacyP4">Apple services such as iCloud, TestFlight, App Store purchases, crash reports, and Apple Watch synchronization are provided by Apple and are subject to Apple's privacy practices.</p>
+          <p data-i18n="privacyP5">For support, contact chanshuowu@icloud.com. Information included in support emails is used only to respond to the request.</p>
+          <p data-i18n="privacyP6">For privacy on shared or locked screens, BusyDay Timer includes private Lock Screen snapshots to hide timer details when you do not want others to see your task names.</p>
         </div>
       </div>
     </section>
 
     <section id="screenshots">
       <div class="wrap">
-        <h2>Visual Examples</h2>
-        <p class="section-intro">These screenshots show the main timer board, setup controls, Lock Screen actions, Watch actions, display options, and language settings.</p>
+        <div class="section-head">
+          <div>
+            <h2 data-i18n="screensTitle">Visual Guide</h2>
+            <p class="section-intro" data-i18n="screensIntro">Screenshots from BusyDay Timer showing the main support topics.</p>
+          </div>
+        </div>
         <div class="screenshots">
           <figure class="shot">
-            <img src="image01.jpeg" alt="BusyDay Timer showing multiple timers on an iPhone Lock Screen with Apple Watch quick actions">
-            <figcaption>Lock Screen snapshot and Watch example</figcaption>
+            <img src="images/en/image01.jpeg" width="621" height="1344" loading="lazy" decoding="async" data-shot="1" alt="BusyDay Timer Lock Screen snapshot and Apple Watch example" data-i18n-attr="alt:shot1Alt">
+            <figcaption data-i18n="shot1Caption">Lock Screen snapshot and Watch example</figcaption>
           </figure>
           <figure class="shot">
-            <img src="image02.jpeg" alt="BusyDay Timer Lock Screen alert with custom sound, add time, and stop controls">
-            <figcaption>Custom sounds and quick actions</figcaption>
+            <img src="images/en/image02.jpeg" width="621" height="1344" loading="lazy" decoding="async" data-shot="2" alt="BusyDay Timer Lock Screen alert controls" data-i18n-attr="alt:shot2Alt">
+            <figcaption data-i18n="shot2Caption">Custom sounds and quick actions</figcaption>
           </figure>
           <figure class="shot">
-            <img src="image03.jpeg" alt="BusyDay Timer main board with several colored timers and notes">
-            <figcaption>One board for every timer</figcaption>
+            <img src="images/en/image03.jpeg" width="621" height="1344" loading="lazy" decoding="async" data-shot="3" alt="BusyDay Timer board with several timers" data-i18n-attr="alt:shot3Alt">
+            <figcaption data-i18n="shot3Caption">One board for every timer</figcaption>
           </figure>
           <figure class="shot">
-            <img src="image04.jpeg" alt="BusyDay Timer palette menu showing timer color theme choices">
-            <figcaption>Timer palettes</figcaption>
+            <img src="images/en/image04.jpeg" width="621" height="1344" loading="lazy" decoding="async" data-shot="4" alt="BusyDay Timer palette settings" data-i18n-attr="alt:shot4Alt">
+            <figcaption data-i18n="shot4Caption">Timer palettes</figcaption>
           </figure>
           <figure class="shot">
-            <img src="image05.jpeg" alt="BusyDay Timer privacy and Quiet Mode settings with private Lock Screen snapshot example">
-            <figcaption>Private and quiet settings</figcaption>
+            <img src="images/en/image05.jpeg" width="621" height="1344" loading="lazy" decoding="async" data-shot="5" alt="BusyDay Timer private and Quiet Mode settings" data-i18n-attr="alt:shot5Alt">
+            <figcaption data-i18n="shot5Caption">Private and quiet settings</figcaption>
           </figure>
           <figure class="shot">
-            <img src="image06.jpeg" alt="BusyDay Timer settings showing wheel picker, timer bookmarks, and saved timer loading">
-            <figcaption>Fast timer setup</figcaption>
+            <img src="images/en/image06.jpeg" width="621" height="1344" loading="lazy" decoding="async" data-shot="6" alt="BusyDay Timer wheel picker and saved timers" data-i18n-attr="alt:shot6Alt">
+            <figcaption data-i18n="shot6Caption">Fast timer setup</figcaption>
           </figure>
           <figure class="shot">
-            <img src="image07.jpeg" alt="BusyDay Timer display style menu with expanded mode, light mode, and widgets">
-            <figcaption>Display styles and widgets</figcaption>
+            <img src="images/en/image07.jpeg" width="621" height="1344" loading="lazy" decoding="async" data-shot="7" alt="BusyDay Timer display style settings" data-i18n-attr="alt:shot7Alt">
+            <figcaption data-i18n="shot7Caption">Display styles and widgets</figcaption>
           </figure>
           <figure class="shot">
-            <img src="image08.jpeg" alt="BusyDay Timer language menu with supported language options">
-            <figcaption>Language settings</figcaption>
+            <img src="images/en/image08.jpeg" width="621" height="1344" loading="lazy" decoding="async" data-shot="8" alt="BusyDay Timer language settings" data-i18n-attr="alt:shot8Alt">
+            <figcaption data-i18n="shot8Caption">Language settings</figcaption>
           </figure>
         </div>
       </div>
@@ -641,31 +925,36 @@
 
     <section id="faq">
       <div class="wrap">
-        <h2>FAQ</h2>
+        <div class="section-head">
+          <div>
+            <h2 data-i18n="faqTitle">FAQ</h2>
+            <p class="section-intro" data-i18n="faqIntro">Short answers for common support questions.</p>
+          </div>
+        </div>
         <div class="faq">
           <details>
-            <summary>How do I set a timer quickly?</summary>
-            <p>Long-press a timer to open Timer Settings. Use the wheel picker, or load a saved timer bookmark for a common timer.</p>
+            <summary data-i18n="faq1Q">How do I set a timer quickly?</summary>
+            <p data-i18n="faq1A">Long-press a timer to open Timer Settings. Use the wheel picker, quick duration buttons, or load a saved timer bookmark.</p>
           </details>
           <details>
-            <summary>How do I control a running or ringing timer?</summary>
-            <p>Tap a timer to start or pause it. Tap a ringing timer to stop it. Tap a finished timer to reset it.</p>
+            <summary data-i18n="faq2Q">How do I control a running or ringing timer?</summary>
+            <p data-i18n="faq2A">Tap a timer to start or pause it. Tap a ringing timer to stop it. Tap a finished timer to reset it.</p>
           </details>
           <details>
-            <summary>Can I use different sounds for different timers?</summary>
-            <p>Yes. BusyDay Timer supports custom alarm sounds, including recording your own alert sound for each timer.</p>
+            <summary data-i18n="faq3Q">Can I use different sounds for different timers?</summary>
+            <p data-i18n="faq3A">Yes. BusyDay Timer supports custom alarm sounds, including recording your own alert sound for each timer.</p>
           </details>
           <details>
-            <summary>How can I make alerts less disruptive?</summary>
-            <p>Turn on Quiet Mode for softer alerts. On Apple Watch, use the Watch's own Silent Mode.</p>
+            <summary data-i18n="faq4Q">How can I make alerts less disruptive?</summary>
+            <p data-i18n="faq4A">Turn on Quiet Mode for softer alerts. On Apple Watch, use the Watch's own Silent Mode.</p>
           </details>
           <details>
-            <summary>Can timer details be hidden on the Lock Screen?</summary>
-            <p>Yes. Use private Lock Screen snapshots to hide timer details when you do not want others to see your task names.</p>
+            <summary data-i18n="faq5Q">Can timer details be hidden on the Lock Screen?</summary>
+            <p data-i18n="faq5A">Yes. Use private Lock Screen snapshots to hide timer details when you do not want others to see your task names.</p>
           </details>
           <details>
-            <summary>Does BusyDay Timer support multiple languages?</summary>
-            <p>Yes. The app lets you switch between supported languages anytime.</p>
+            <summary data-i18n="faq6Q">Does BusyDay Timer support multiple languages?</summary>
+            <p data-i18n="faq6A">Yes. The app lets you switch between supported languages anytime.</p>
           </details>
         </div>
       </div>
@@ -674,16 +963,18 @@
     <section id="contact">
       <div class="wrap support">
         <div class="card">
-          <h2>Contact / Support</h2>
-          <p>If you need help with BusyDay Timer, include your iPhone model, iOS version, and a short description of what happened.</p>
-          <p class="contact-line">Support: <a href="mailto:chanshuowu@icloud.com">chanshuowu@icloud.com</a></p>
+          <h2 data-i18n="contactTitle">Contact Support</h2>
+          <p data-i18n="contactIntro">If you need help with BusyDay Timer, include your iPhone model, iOS version, BusyDay Timer version, and a short description of what happened.</p>
+          <p data-i18n="contactPrivacy">Support emails are used only to respond to your request.</p>
+          <p class="contact-line"><span data-i18n="supportLabel">Support:</span> <a href="mailto:chanshuowu@icloud.com">chanshuowu@icloud.com</a></p>
         </div>
         <aside class="card">
-          <h3>App Details</h3>
-          <ul class="feature-list">
-            <li>App name: BusyDay Timer</li>
-            <li>Developer: CS Wu</li>
-            <li>Copyright: 2026 Chan Shuo Wu</li>
+          <h3 data-i18n="detailsTitle">App Details</h3>
+          <ul class="detail-list">
+            <li data-i18n="detailName">App name: BusyDay Timer</li>
+            <li data-i18n="detailDeveloper">Developer: CS Wu</li>
+            <li data-i18n="detailCategory">Category: Productivity</li>
+            <li data-i18n="detailCopyright">Copyright: 2026 Chan Shuo Wu</li>
           </ul>
         </aside>
       </div>
@@ -691,9 +982,1345 @@
   </main>
 
   <footer>
-    <div class="wrap">
-      BusyDay Timer support page. This page is focused on app help, common usage questions, and support contact information.
+    <div class="wrap" data-i18n="footerText">
+      BusyDay Timer support page for help, troubleshooting, privacy information, and support contact.
     </div>
   </footer>
+
+  <script>
+    const translations = {
+      en: {
+        pageTitle: "BusyDay Timer Support",
+        metaDescription: "Support page for BusyDay Timer, a multi-timer board with Lock Screen alerts, Apple Watch actions, widgets, Quiet Mode, custom sounds, and privacy controls.",
+        navAria: "Support navigation",
+        brand: "BusyDay Timer Support",
+        languageLabel: "Language",
+        navQuickHelp: "Quick Help",
+        navHowTo: "How To Use",
+        navTroubleshooting: "Troubleshooting",
+        navPrivacy: "Privacy",
+        navFaq: "FAQ",
+        navContact: "Contact",
+        heroEyebrow: "App Support",
+        heroTitle: "BusyDay Timer",
+        heroLead: "Multiple alarm timers for busy days. Manage them on one board, check status from the Lock Screen, and use Apple Watch actions when a timer needs attention.",
+        appStoreButton: "View on the App Store",
+        contactButton: "Contact Support",
+        summaryAria: "App summary",
+        pillTimers: "Multiple timers",
+        pillLock: "Lock Screen alerts",
+        pillWatch: "Apple Watch actions",
+        pillPrivacy: "Private snapshots",
+        heroImageAlt: "BusyDay Timer Lock Screen snapshot with multiple timers and Apple Watch example",
+        heroNote: "Need help fast? Start with Quick Help, then send your iPhone model and iOS version if you contact support.",
+        quickTitle: "Quick Help",
+        quickIntro: "Use one board to manage multiple timers and notes. These are the features most people need first.",
+        quickNote: "BusyDay Timer works fully on iPhone. Apple Watch adds wrist alerts and quick actions.",
+        quickTimerTitle: "Set a Timer",
+        quickTimerBody: "Long-press a timer to open Timer Settings. Use the wheel and bookmarks to set timers quickly.",
+        quickLockTitle: "Lock Screen",
+        quickLockBody: "When your iPhone is locked, you can still check timer status. When a timer rings, stop it or add extra time from the alert.",
+        quickWatchTitle: "Apple Watch",
+        quickWatchBody: "Check the next timer on Apple Watch. When a timer rings, you can stop it or add extra time.",
+        quickSoundsTitle: "Custom Sounds",
+        quickSoundsBody: "Record your own alarm sound for each timer so different timers can use different alerts.",
+        quickQuietTitle: "Quiet Mode",
+        quickQuietBody: "Turn on Quiet Mode for softer alerts in shared spaces. On Apple Watch, use the watch's own Silent Mode.",
+        quickWidgetsTitle: "Widgets",
+        quickWidgetsBody: "Add timer widgets to check your timers from the Home Screen without opening the app.",
+        howTitle: "How To Use",
+        howIntro: "The core workflow is simple: set timers, keep the board visible, and use quick controls when something needs attention.",
+        howStep1Title: "Set a timer",
+        howStep1Body: "Long-press a timer to open Timer Settings. Use the wheel picker, quick duration buttons, and saved bookmarks.",
+        howStep2Title: "Control timers",
+        howStep2Body: "Tap a timer to start or pause it. Tap a ringing timer to stop it. Tap a finished timer to reset it.",
+        howStep3Title: "Use saved timers",
+        howStep3Body: "Save common timer setups as bookmarks, then load them when you need the same timer again.",
+        howStep4Title: "Keep status visible",
+        howStep4Body: "Start a timer, lock your iPhone, and confirm the timer board appears on the Lock Screen snapshot.",
+        howStep5Title: "Tune the board",
+        howStep5Body: "Use Display settings to choose the snapshot style, board appearance, palettes, and whether timer titles stay private.",
+        lockTitle: "Lock Screen, Apple Watch, And Widgets",
+        lockIntro: "BusyDay Timer is built for moments when you cannot keep opening the app.",
+        lockCardTitle: "Lock Screen Snapshot",
+        lockCardBody: "Use the snapshot to check timer status while your iPhone is locked. Snapshot buttons can pause, resume, stop, or add time when available.",
+        watchCardTitle: "Apple Watch",
+        watchCardBody: "If you use Apple Watch, check the Smart Stack timer view and action button while a timer is active.",
+        widgetCardTitle: "Home Screen Widgets",
+        widgetCardBody: "To add a widget, touch and hold the Home Screen, tap Edit, tap Add Widget, then search for BusyDay Timer.",
+        troubleTitle: "Troubleshooting",
+        troubleIntro: "Try these checks before contacting support. They cover the most common timer, Lock Screen, Watch, sound, widget, and language issues.",
+        troubleLockTitle: "Lock Screen snapshot is not visible",
+        troubleLockBody: "Start at least one timer, lock your iPhone, and wait a moment. If the snapshot is still missing, confirm Live Activities and notifications are allowed for BusyDay Timer in iOS Settings.",
+        troubleWatchTitle: "Apple Watch controls are not appearing",
+        troubleWatchBody: "Keep the iPhone app installed and paired with your watch. Start a timer on iPhone, then check the Smart Stack or timer alert on Apple Watch.",
+        troubleSoundTitle: "Alerts are too loud or too soft",
+        troubleSoundBody: "Use Quiet Mode for softer alerts. For Watch alerts, use Apple Watch Silent Mode or adjust haptics in Watch settings.",
+        troubleWidgetTitle: "Widgets do not update immediately",
+        troubleWidgetBody: "iOS controls widget refresh timing. Open BusyDay Timer once, confirm the timer is running, then give the widget a moment to refresh.",
+        troublePrivateTitle: "Timer details show on the Lock Screen",
+        troublePrivateBody: "Open Display settings and choose a private snapshot style when you do not want task names visible on a locked or shared screen.",
+        troubleLanguageTitle: "Wrong language is shown",
+        troubleLanguageBody: "Open the app's language menu and choose System Default or a specific language. This support page also has its own language selector at the top.",
+        privacyTitle: "Privacy Policy",
+        privacyDate: "Last updated: May 4, 2026",
+        privacyNote: "BusyDay Timer is designed to keep your timer data local to your device.",
+        privacyP1: "BusyDay Timer does not collect, sell, or share personal data.",
+        privacyP2: "Timer names, notes, settings, preferences, custom alarm sounds, and saved timers are stored locally on the user's device and are not sent to the developer.",
+        privacyP3: "BusyDay Timer does not use third-party analytics, advertising SDKs, tracking SDKs, or account login services.",
+        privacyP4: "Apple services such as iCloud, TestFlight, App Store purchases, crash reports, and Apple Watch synchronization are provided by Apple and are subject to Apple's privacy practices.",
+        privacyP5: "For support, contact chanshuowu@icloud.com. Information included in support emails is used only to respond to the request.",
+        privacyP6: "For privacy on shared or locked screens, BusyDay Timer includes private Lock Screen snapshots to hide timer details when you do not want others to see your task names.",
+        screensTitle: "Visual Guide",
+        screensIntro: "Screenshots from BusyDay Timer showing the main support topics.",
+        shot1Alt: "BusyDay Timer Lock Screen snapshot and Apple Watch example",
+        shot1Caption: "Lock Screen snapshot and Watch example",
+        shot2Alt: "BusyDay Timer Lock Screen alert controls",
+        shot2Caption: "Custom sounds and quick actions",
+        shot3Alt: "BusyDay Timer board with several timers",
+        shot3Caption: "One board for every timer",
+        shot4Alt: "BusyDay Timer palette settings",
+        shot4Caption: "Timer palettes",
+        shot5Alt: "BusyDay Timer private and Quiet Mode settings",
+        shot5Caption: "Private and quiet settings",
+        shot6Alt: "BusyDay Timer wheel picker and saved timers",
+        shot6Caption: "Fast timer setup",
+        shot7Alt: "BusyDay Timer display style settings",
+        shot7Caption: "Display styles and widgets",
+        shot8Alt: "BusyDay Timer language settings",
+        shot8Caption: "Language settings",
+        faqTitle: "FAQ",
+        faqIntro: "Short answers for common support questions.",
+        faq1Q: "How do I set a timer quickly?",
+        faq1A: "Long-press a timer to open Timer Settings. Use the wheel picker, quick duration buttons, or load a saved timer bookmark.",
+        faq2Q: "How do I control a running or ringing timer?",
+        faq2A: "Tap a timer to start or pause it. Tap a ringing timer to stop it. Tap a finished timer to reset it.",
+        faq3Q: "Can I use different sounds for different timers?",
+        faq3A: "Yes. BusyDay Timer supports custom alarm sounds, including recording your own alert sound for each timer.",
+        faq4Q: "How can I make alerts less disruptive?",
+        faq4A: "Turn on Quiet Mode for softer alerts. On Apple Watch, use the Watch's own Silent Mode.",
+        faq5Q: "Can timer details be hidden on the Lock Screen?",
+        faq5A: "Yes. Use private Lock Screen snapshots to hide timer details when you do not want others to see your task names.",
+        faq6Q: "Does BusyDay Timer support multiple languages?",
+        faq6A: "Yes. The app lets you switch between supported languages anytime.",
+        contactTitle: "Contact Support",
+        contactIntro: "If you need help with BusyDay Timer, include your iPhone model, iOS version, BusyDay Timer version, and a short description of what happened.",
+        contactPrivacy: "Support emails are used only to respond to your request.",
+        supportLabel: "Support:",
+        detailsTitle: "App Details",
+        detailName: "App name: BusyDay Timer",
+        detailDeveloper: "Developer: CS Wu",
+        detailCategory: "Category: Productivity",
+        detailCopyright: "Copyright: 2026 Chan Shuo Wu",
+        footerText: "BusyDay Timer support page for help, troubleshooting, privacy information, and support contact."
+      },
+      "zh-Hans": {
+        pageTitle: "BusyDay Timer 支持",
+        metaDescription: "BusyDay Timer 支持页面，提供多计时器、锁屏提醒、Apple Watch 操作、小组件、静音模式、自定义声音和隐私控制说明。",
+        navAria: "支持页面导航",
+        brand: "BusyDay Timer 支持",
+        languageLabel: "语言",
+        navQuickHelp: "快速帮助",
+        navHowTo: "使用方法",
+        navTroubleshooting: "故障排查",
+        navPrivacy: "隐私",
+        navFaq: "常见问题",
+        navContact: "联系",
+        heroEyebrow: "App 支持",
+        heroTitle: "BusyDay Timer",
+        heroLead: "为忙碌的一天准备的多任务计时闹铃。在一个面板上管理计时器，从锁屏查看状态，并在计时器需要处理时使用 Apple Watch 快速操作。",
+        appStoreButton: "在 App Store 查看",
+        contactButton: "联系支持",
+        summaryAria: "App 摘要",
+        pillTimers: "多个计时器",
+        pillLock: "锁屏提醒",
+        pillWatch: "Apple Watch 操作",
+        pillPrivacy: "隐私快照",
+        heroImageAlt: "BusyDay Timer 锁屏计时器快照和 Apple Watch 示例",
+        heroNote: "需要快速获得帮助？先查看快速帮助。联系支持时，请提供 iPhone 型号和 iOS 版本。",
+        quickTitle: "快速帮助",
+        quickIntro: "用一个面板同时管理多个计时器和便签。这里是大多数用户最先需要的功能。",
+        quickNote: "BusyDay Timer 可完整在 iPhone 上使用。Apple Watch 可增加手腕提醒和快速操作。",
+        quickTimerTitle: "设置计时器",
+        quickTimerBody: "长按计时器即可打开计时器设置。使用转盘和书签可快速设置计时器。",
+        quickLockTitle: "锁屏",
+        quickLockBody: "屏幕上锁后，你仍可查看计时器状态。计时器响铃时，可直接从提醒中停止或延长时间。",
+        quickWatchTitle: "Apple Watch",
+        quickWatchBody: "可在 Apple Watch 上查看下一个计时器。计时器响铃时，你可以停止它或增加一些时间。",
+        quickSoundsTitle: "自定义声音",
+        quickSoundsBody: "可为每个计时器录制自己的闹铃声，让不同计时器使用不同提醒。",
+        quickQuietTitle: "静音模式",
+        quickQuietBody: "在共享空间开启静音模式可获得更柔和的提醒。在 Apple Watch 上，请使用手表自己的静音模式。",
+        quickWidgetsTitle: "小组件",
+        quickWidgetsBody: "添加计时器小组件，即可不打开 App 也能从主屏幕查看计时器。",
+        howTitle: "使用方法",
+        howIntro: "核心流程很简单：设置计时器、保持面板可见，并在需要关注时使用快速控制。",
+        howStep1Title: "设置计时器",
+        howStep1Body: "长按计时器打开计时器设置。使用转盘、快速时长按钮和已保存书签。",
+        howStep2Title: "控制计时器",
+        howStep2Body: "轻点计时器即可开始或暂停。轻点正在响铃的计时器即可停止。轻点已结束的计时器即可重置。",
+        howStep3Title: "使用已保存计时器",
+        howStep3Body: "将常用计时器设置保存为书签，需要同样计时器时再载入。",
+        howStep4Title: "保持状态可见",
+        howStep4Body: "启动一个计时器，锁定 iPhone，并确认计时器面板出现在锁屏快照上。",
+        howStep5Title: "调整面板",
+        howStep5Body: "在显示设置中选择快照样式、面板外观、配色，以及是否隐藏计时器标题。",
+        lockTitle: "锁屏、Apple Watch 和小组件",
+        lockIntro: "BusyDay Timer 适合无法一直打开 App 的时刻。",
+        lockCardTitle: "锁屏快照",
+        lockCardBody: "iPhone 锁定时，可用快照查看计时器状态。快照按钮可在可用时暂停、继续、停止或增加时间。",
+        watchCardTitle: "Apple Watch",
+        watchCardBody: "如果使用 Apple Watch，请在计时器运行时查看智能叠放中的计时器视图和操作按钮。",
+        widgetCardTitle: "主屏幕小组件",
+        widgetCardBody: "要添加小组件，请按住主屏幕，点“编辑”，点“添加小组件”，然后搜索 BusyDay Timer。",
+        troubleTitle: "故障排查",
+        troubleIntro: "联系支持前可先尝试这些检查。它们覆盖常见的计时器、锁屏、手表、声音、小组件和语言问题。",
+        troubleLockTitle: "锁屏快照不可见",
+        troubleLockBody: "至少启动一个计时器，锁定 iPhone，并等待片刻。如果仍未出现快照，请在 iOS 设置中确认 BusyDay Timer 已允许实时活动和通知。",
+        troubleWatchTitle: "Apple Watch 控制没有出现",
+        troubleWatchBody: "请保留 iPhone App，并确保手表已配对。在 iPhone 上启动计时器，然后在 Apple Watch 的智能叠放或计时器提醒中查看。",
+        troubleSoundTitle: "提醒太大声或太小声",
+        troubleSoundBody: "使用静音模式获得更柔和的提醒。手表提醒可使用 Apple Watch 静音模式，或在 Watch 设置中调整触感。",
+        troubleWidgetTitle: "小组件没有立即更新",
+        troubleWidgetBody: "iOS 会控制小组件刷新时机。打开 BusyDay Timer 一次，确认计时器正在运行，然后等待小组件刷新。",
+        troublePrivateTitle: "计时器详情显示在锁屏上",
+        troublePrivateBody: "当你不想让任务名称显示在锁定或共享屏幕上时，请打开显示设置并选择隐私快照样式。",
+        troubleLanguageTitle: "显示了错误语言",
+        troubleLanguageBody: "打开 App 的语言菜单，选择系统默认或指定语言。本支持页面顶部也有独立的语言选择器。",
+        privacyTitle: "隐私政策",
+        privacyDate: "最后更新：2026 年 5 月 4 日",
+        privacyNote: "BusyDay Timer 的设计目标是将计时器数据保留在你的设备本地。",
+        privacyP1: "BusyDay Timer 不会收集、出售或共享个人数据。",
+        privacyP2: "计时器名称、便签、设置、偏好、自定义闹铃声和已保存计时器都存储在用户设备本地，不会发送给开发者。",
+        privacyP3: "BusyDay Timer 不使用第三方分析、广告 SDK、跟踪 SDK 或账号登录服务。",
+        privacyP4: "iCloud、TestFlight、App Store 购买、崩溃报告和 Apple Watch 同步等 Apple 服务由 Apple 提供，并受 Apple 的隐私惯例约束。",
+        privacyP5: "如需支持，请联系 chanshuowu@icloud.com。支持邮件中包含的信息只会用于回复请求。",
+        privacyP6: "为了保护共享或锁定屏幕上的隐私，BusyDay Timer 提供隐私锁屏快照，可在你不希望他人看到任务名称时隐藏计时器详情。",
+        screensTitle: "视觉指南",
+        screensIntro: "来自 BusyDay Timer 的截图，展示主要支持主题。",
+        shot1Alt: "BusyDay Timer 锁屏快照和 Apple Watch 示例",
+        shot1Caption: "锁屏快照和手表示例",
+        shot2Alt: "BusyDay Timer 锁屏提醒控制",
+        shot2Caption: "自定义声音和快速操作",
+        shot3Alt: "BusyDay Timer 多计时器面板",
+        shot3Caption: "一个面板管理每个计时器",
+        shot4Alt: "BusyDay Timer 配色设置",
+        shot4Caption: "计时器配色",
+        shot5Alt: "BusyDay Timer 隐私和静音模式设置",
+        shot5Caption: "隐私和静音设置",
+        shot6Alt: "BusyDay Timer 转盘选择器和已保存计时器",
+        shot6Caption: "快速设置计时器",
+        shot7Alt: "BusyDay Timer 显示样式设置",
+        shot7Caption: "显示样式和小组件",
+        shot8Alt: "BusyDay Timer 语言设置",
+        shot8Caption: "语言设置",
+        faqTitle: "常见问题",
+        faqIntro: "常见支持问题的简短答案。",
+        faq1Q: "如何快速设置计时器？",
+        faq1A: "长按计时器打开计时器设置。使用转盘、快速时长按钮，或载入已保存计时器书签。",
+        faq2Q: "如何控制运行中或响铃中的计时器？",
+        faq2A: "轻点计时器即可开始或暂停。轻点正在响铃的计时器即可停止。轻点已结束的计时器即可重置。",
+        faq3Q: "不同计时器可以使用不同声音吗？",
+        faq3A: "可以。BusyDay Timer 支持自定义闹铃声，包括为每个计时器录制自己的提醒声。",
+        faq4Q: "如何让提醒不那么打扰？",
+        faq4A: "开启静音模式可获得更柔和的提醒。在 Apple Watch 上，请使用手表自己的静音模式。",
+        faq5Q: "可以在锁屏隐藏计时器详情吗？",
+        faq5A: "可以。使用隐私锁屏快照，在不想让他人看到任务名称时隐藏计时器详情。",
+        faq6Q: "BusyDay Timer 支持多语言吗？",
+        faq6A: "支持。App 可随时在支持的语言之间切换。",
+        contactTitle: "联系支持",
+        contactIntro: "如果需要 BusyDay Timer 帮助，请提供 iPhone 型号、iOS 版本、BusyDay Timer 版本，以及发生情况的简短说明。",
+        contactPrivacy: "支持邮件只会用于回复你的请求。",
+        supportLabel: "支持：",
+        detailsTitle: "App 详情",
+        detailName: "App 名称：BusyDay Timer",
+        detailDeveloper: "开发者：CS Wu",
+        detailCategory: "类别：效率",
+        detailCopyright: "版权：2026 Chan Shuo Wu",
+        footerText: "BusyDay Timer 支持页面，提供帮助、故障排查、隐私信息和支持联系方式。"
+      },
+      "zh-Hant": {
+        pageTitle: "BusyDay Timer 支援",
+        metaDescription: "BusyDay Timer 支援頁面，提供多計時器、鎖定畫面提醒、Apple Watch 操作、小工具、靜音模式、自訂聲音和隱私控制說明。",
+        navAria: "支援頁面導覽",
+        brand: "BusyDay Timer 支援",
+        languageLabel: "語言",
+        navQuickHelp: "快速協助",
+        navHowTo: "使用方法",
+        navTroubleshooting: "疑難排解",
+        navPrivacy: "隱私",
+        navFaq: "常見問題",
+        navContact: "聯絡",
+        heroEyebrow: "App 支援",
+        heroTitle: "BusyDay Timer",
+        heroLead: "為忙碌的一天準備的多任務計時鬧鈴。在一個面板上管理計時器，從鎖定畫面查看狀態，並在計時器需要處理時使用 Apple Watch 快速操作。",
+        appStoreButton: "在 App Store 查看",
+        contactButton: "聯絡支援",
+        summaryAria: "App 摘要",
+        pillTimers: "多個計時器",
+        pillLock: "鎖定畫面提醒",
+        pillWatch: "Apple Watch 操作",
+        pillPrivacy: "隱私快照",
+        heroImageAlt: "BusyDay Timer 鎖定畫面計時器快照和 Apple Watch 範例",
+        heroNote: "需要快速取得協助？先查看快速協助。聯絡支援時，請提供 iPhone 型號和 iOS 版本。",
+        quickTitle: "快速協助",
+        quickIntro: "用一個面板同時管理多個計時器和便條。這裡是多數使用者最先需要的功能。",
+        quickNote: "BusyDay Timer 可完整在 iPhone 上使用。Apple Watch 可增加手腕提醒和快速操作。",
+        quickTimerTitle: "設定計時器",
+        quickTimerBody: "長按計時器即可開啟計時器設定。使用轉盤和書籤可快速設定計時器。",
+        quickLockTitle: "鎖定畫面",
+        quickLockBody: "畫面上鎖時，你仍可查看計時器狀態。計時器響鈴時，可直接從提醒中停止或延長時間。",
+        quickWatchTitle: "Apple Watch",
+        quickWatchBody: "可在 Apple Watch 上查看下一個計時器。計時器響鈴時，你可以停止它或增加一些時間。",
+        quickSoundsTitle: "自訂聲音",
+        quickSoundsBody: "可為每個計時器錄製自己的鬧鈴聲，讓不同計時器使用不同提醒。",
+        quickQuietTitle: "靜音模式",
+        quickQuietBody: "在共享空間開啟靜音模式可獲得更柔和的提醒。在 Apple Watch 上，請使用手錶自己的靜音模式。",
+        quickWidgetsTitle: "小工具",
+        quickWidgetsBody: "加入計時器小工具，即可不開啟 App 也能從主畫面查看計時器。",
+        howTitle: "使用方法",
+        howIntro: "核心流程很簡單：設定計時器、保持面板可見，並在需要注意時使用快速控制。",
+        howStep1Title: "設定計時器",
+        howStep1Body: "長按計時器開啟計時器設定。使用轉盤、快速時長按鈕和已儲存書籤。",
+        howStep2Title: "控制計時器",
+        howStep2Body: "點一下計時器即可開始或暫停。點一下正在響鈴的計時器即可停止。點一下已結束的計時器即可重設。",
+        howStep3Title: "使用已儲存計時器",
+        howStep3Body: "將常用計時器設定儲存為書籤，需要同樣計時器時再載入。",
+        howStep4Title: "保持狀態可見",
+        howStep4Body: "啟動一個計時器，鎖定 iPhone，並確認計時器面板出現在鎖定畫面快照上。",
+        howStep5Title: "調整面板",
+        howStep5Body: "在顯示設定中選擇快照樣式、面板外觀、配色，以及是否隱藏計時器標題。",
+        lockTitle: "鎖定畫面、Apple Watch 與小工具",
+        lockIntro: "BusyDay Timer 適合無法一直開啟 App 的時刻。",
+        lockCardTitle: "鎖定畫面快照",
+        lockCardBody: "iPhone 鎖定時，可用快照查看計時器狀態。快照按鈕可在可用時暫停、繼續、停止或增加時間。",
+        watchCardTitle: "Apple Watch",
+        watchCardBody: "如果使用 Apple Watch，請在計時器執行時查看智慧型堆疊中的計時器視圖和操作按鈕。",
+        widgetCardTitle: "主畫面小工具",
+        widgetCardBody: "要加入小工具，請長按主畫面，點一下「編輯」，再點一下「加入小工具」，然後搜尋 BusyDay Timer。",
+        troubleTitle: "疑難排解",
+        troubleIntro: "聯絡支援前可先嘗試這些檢查。它們涵蓋常見的計時器、鎖定畫面、手錶、聲音、小工具和語言問題。",
+        troubleLockTitle: "鎖定畫面快照不可見",
+        troubleLockBody: "至少啟動一個計時器，鎖定 iPhone，並等待片刻。如果仍未出現快照，請在 iOS 設定中確認 BusyDay Timer 已允許即時動態和通知。",
+        troubleWatchTitle: "Apple Watch 控制沒有出現",
+        troubleWatchBody: "請保留 iPhone App，並確保手錶已配對。在 iPhone 上啟動計時器，然後在 Apple Watch 的智慧型堆疊或計時器提醒中查看。",
+        troubleSoundTitle: "提醒太大聲或太小聲",
+        troubleSoundBody: "使用靜音模式獲得更柔和的提醒。手錶提醒可使用 Apple Watch 靜音模式，或在 Watch 設定中調整觸覺回饋。",
+        troubleWidgetTitle: "小工具沒有立即更新",
+        troubleWidgetBody: "iOS 會控制小工具刷新時機。開啟 BusyDay Timer 一次，確認計時器正在執行，然後等待小工具刷新。",
+        troublePrivateTitle: "計時器詳情顯示在鎖定畫面上",
+        troublePrivateBody: "當你不想讓任務名稱顯示在鎖定或共享畫面上時，請開啟顯示設定並選擇隱私快照樣式。",
+        troubleLanguageTitle: "顯示了錯誤語言",
+        troubleLanguageBody: "開啟 App 的語言選單，選擇系統預設或指定語言。本支援頁面頂部也有獨立的語言選擇器。",
+        privacyTitle: "隱私權政策",
+        privacyDate: "最後更新：2026 年 5 月 4 日",
+        privacyNote: "BusyDay Timer 的設計目標是將計時器資料保留在你的裝置本機。",
+        privacyP1: "BusyDay Timer 不會收集、出售或共享個人資料。",
+        privacyP2: "計時器名稱、便條、設定、偏好、自訂鬧鈴聲和已儲存計時器都儲存在使用者裝置本機，不會傳送給開發者。",
+        privacyP3: "BusyDay Timer 不使用第三方分析、廣告 SDK、追蹤 SDK 或帳號登入服務。",
+        privacyP4: "iCloud、TestFlight、App Store 購買、當機報告和 Apple Watch 同步等 Apple 服務由 Apple 提供，並受 Apple 的隱私慣例約束。",
+        privacyP5: "如需支援，請聯絡 chanshuowu@icloud.com。支援郵件中包含的資訊只會用於回覆請求。",
+        privacyP6: "為了保護共享或鎖定畫面上的隱私，BusyDay Timer 提供隱私鎖定畫面快照，可在你不希望他人看到任務名稱時隱藏計時器詳情。",
+        screensTitle: "視覺指南",
+        screensIntro: "來自 BusyDay Timer 的截圖，展示主要支援主題。",
+        shot1Alt: "BusyDay Timer 鎖定畫面快照和 Apple Watch 範例",
+        shot1Caption: "鎖定畫面快照和手錶範例",
+        shot2Alt: "BusyDay Timer 鎖定畫面提醒控制",
+        shot2Caption: "自訂聲音和快速操作",
+        shot3Alt: "BusyDay Timer 多計時器面板",
+        shot3Caption: "一個面板管理每個計時器",
+        shot4Alt: "BusyDay Timer 配色設定",
+        shot4Caption: "計時器配色",
+        shot5Alt: "BusyDay Timer 隱私和靜音模式設定",
+        shot5Caption: "隱私和靜音設定",
+        shot6Alt: "BusyDay Timer 轉盤選擇器和已儲存計時器",
+        shot6Caption: "快速設定計時器",
+        shot7Alt: "BusyDay Timer 顯示樣式設定",
+        shot7Caption: "顯示樣式和小工具",
+        shot8Alt: "BusyDay Timer 語言設定",
+        shot8Caption: "語言設定",
+        faqTitle: "常見問題",
+        faqIntro: "常見支援問題的簡短答案。",
+        faq1Q: "如何快速設定計時器？",
+        faq1A: "長按計時器開啟計時器設定。使用轉盤、快速時長按鈕，或載入已儲存計時器書籤。",
+        faq2Q: "如何控制執行中或響鈴中的計時器？",
+        faq2A: "點一下計時器即可開始或暫停。點一下正在響鈴的計時器即可停止。點一下已結束的計時器即可重設。",
+        faq3Q: "不同計時器可以使用不同聲音嗎？",
+        faq3A: "可以。BusyDay Timer 支援自訂鬧鈴聲，包括為每個計時器錄製自己的提醒聲。",
+        faq4Q: "如何讓提醒不那麼打擾？",
+        faq4A: "開啟靜音模式可獲得更柔和的提醒。在 Apple Watch 上，請使用手錶自己的靜音模式。",
+        faq5Q: "可以在鎖定畫面隱藏計時器詳情嗎？",
+        faq5A: "可以。使用隱私鎖定畫面快照，在不想讓他人看到任務名稱時隱藏計時器詳情。",
+        faq6Q: "BusyDay Timer 支援多語言嗎？",
+        faq6A: "支援。App 可隨時在支援的語言之間切換。",
+        contactTitle: "聯絡支援",
+        contactIntro: "如果需要 BusyDay Timer 協助，請提供 iPhone 型號、iOS 版本、BusyDay Timer 版本，以及發生情況的簡短說明。",
+        contactPrivacy: "支援郵件只會用於回覆你的請求。",
+        supportLabel: "支援：",
+        detailsTitle: "App 詳情",
+        detailName: "App 名稱：BusyDay Timer",
+        detailDeveloper: "開發者：CS Wu",
+        detailCategory: "類別：生產力",
+        detailCopyright: "版權：2026 Chan Shuo Wu",
+        footerText: "BusyDay Timer 支援頁面，提供協助、疑難排解、隱私資訊和支援聯絡方式。"
+      },
+      ja: {
+        pageTitle: "BusyDay Timer サポート",
+        metaDescription: "BusyDay Timer のサポートページです。複数タイマー、ロック画面通知、Apple Watch 操作、ウィジェット、静音モード、カスタム音、プライバシー設定を案内します。",
+        navAria: "サポートナビゲーション",
+        brand: "BusyDay Timer サポート",
+        languageLabel: "言語",
+        navQuickHelp: "クイックヘルプ",
+        navHowTo: "使い方",
+        navTroubleshooting: "トラブル対応",
+        navPrivacy: "プライバシー",
+        navFaq: "FAQ",
+        navContact: "連絡先",
+        heroEyebrow: "App サポート",
+        heroTitle: "BusyDay Timer",
+        heroLead: "忙しい日のための複数アラームタイマー。1つのボードで管理し、ロック画面で状況を確認し、タイマーに注意が必要なときは Apple Watch で操作できます。",
+        appStoreButton: "App Store で見る",
+        contactButton: "サポートに連絡",
+        summaryAria: "App の概要",
+        pillTimers: "複数タイマー",
+        pillLock: "ロック画面通知",
+        pillWatch: "Apple Watch 操作",
+        pillPrivacy: "プライベート表示",
+        heroImageAlt: "BusyDay Timer のロック画面スナップショットと Apple Watch の例",
+        heroNote: "急いでいる場合は、まずクイックヘルプを確認してください。連絡時は iPhone のモデルと iOS バージョンをお知らせください。",
+        quickTitle: "クイックヘルプ",
+        quickIntro: "1つのボードで複数のタイマーとメモをまとめて管理できます。多くの方が最初に使う機能です。",
+        quickNote: "BusyDay Timer は iPhone だけで利用できます。Apple Watch を使うと手首で通知と操作ができます。",
+        quickTimerTitle: "タイマーを設定",
+        quickTimerBody: "タイマーを長押しするとタイマー設定が開きます。ホイールとブックマークを使うと素早く設定できます。",
+        quickLockTitle: "ロック画面",
+        quickLockBody: "iPhone がロックされていてもタイマーの状態を確認できます。タイマーが鳴ったら、通知から停止または延長できます。",
+        quickWatchTitle: "Apple Watch",
+        quickWatchBody: "Apple Watch で次のタイマーを確認できます。タイマーが鳴ったら、停止したり延長したりできます。",
+        quickSoundsTitle: "カスタム音",
+        quickSoundsBody: "タイマーごとに独自のアラーム音を録音できます。用途ごとに違う通知音を使えます。",
+        quickQuietTitle: "静音モード",
+        quickQuietBody: "共有スペースでは静音モードで控えめな通知にできます。Apple Watch では Watch 本体の消音モードを使ってください。",
+        quickWidgetsTitle: "ウィジェット",
+        quickWidgetsBody: "タイマーウィジェットを追加すると、App を開かずにホーム画面でタイマーを確認できます。",
+        howTitle: "使い方",
+        howIntro: "基本は、タイマーを設定し、ボードを見える状態にし、必要なときに素早く操作することです。",
+        howStep1Title: "タイマーを設定",
+        howStep1Body: "タイマーを長押ししてタイマー設定を開きます。ホイール、クイック時間ボタン、保存済みブックマークを使います。",
+        howStep2Title: "タイマーを操作",
+        howStep2Body: "タイマーをタップすると開始または一時停止します。鳴っているタイマーはタップで停止し、終了したタイマーはタップでリセットします。",
+        howStep3Title: "保存済みタイマーを使う",
+        howStep3Body: "よく使うタイマー設定をブックマークとして保存し、同じタイマーが必要なときに読み込みます。",
+        howStep4Title: "状況を表示しておく",
+        howStep4Body: "タイマーを開始し、iPhone をロックして、ロック画面スナップショットにタイマーボードが表示されることを確認します。",
+        howStep5Title: "ボードを調整",
+        howStep5Body: "表示設定でスナップショットのスタイル、ボードの外観、パレット、タイマー名を非表示にするかどうかを選びます。",
+        lockTitle: "ロック画面、Apple Watch、ウィジェット",
+        lockIntro: "BusyDay Timer は、App を何度も開けない場面のために作られています。",
+        lockCardTitle: "ロック画面スナップショット",
+        lockCardBody: "iPhone がロックされている間もスナップショットで状態を確認できます。ボタンが表示されている場合は、一時停止、再開、停止、時間追加ができます。",
+        watchCardTitle: "Apple Watch",
+        watchCardBody: "Apple Watch を使う場合は、タイマー動作中にスマートスタックのタイマー表示と操作ボタンを確認してください。",
+        widgetCardTitle: "ホーム画面ウィジェット",
+        widgetCardBody: "ウィジェットを追加するには、ホーム画面を長押しし、「編集」、「ウィジェットを追加」の順にタップして BusyDay Timer を検索してください。",
+        troubleTitle: "トラブル対応",
+        troubleIntro: "サポートへ連絡する前に、以下を確認してください。タイマー、ロック画面、Watch、音、ウィジェット、言語のよくある問題を扱います。",
+        troubleLockTitle: "ロック画面スナップショットが表示されない",
+        troubleLockBody: "少なくとも1つのタイマーを開始し、iPhone をロックして少し待ちます。表示されない場合は、iOS 設定で BusyDay Timer のライブアクティビティと通知が許可されているか確認してください。",
+        troubleWatchTitle: "Apple Watch の操作が表示されない",
+        troubleWatchBody: "iPhone App をインストールしたまま、Watch がペアリングされていることを確認します。iPhone でタイマーを開始し、Apple Watch のスマートスタックまたは通知を確認してください。",
+        troubleSoundTitle: "通知音が大きすぎる、または小さすぎる",
+        troubleSoundBody: "控えめな通知には静音モードを使います。Watch の通知は Apple Watch の消音モード、または Watch 設定の触覚を調整してください。",
+        troubleWidgetTitle: "ウィジェットがすぐに更新されない",
+        troubleWidgetBody: "ウィジェットの更新タイミングは iOS が制御します。BusyDay Timer を一度開き、タイマーが動作中であることを確認してから少し待ってください。",
+        troublePrivateTitle: "タイマー詳細がロック画面に表示される",
+        troublePrivateBody: "タスク名をロック画面や共有画面に表示したくない場合は、表示設定を開き、プライベートなスナップショットスタイルを選んでください。",
+        troubleLanguageTitle: "別の言語が表示される",
+        troubleLanguageBody: "App の言語メニューでシステムデフォルトまたは特定の言語を選びます。このサポートページにも上部に独自の言語選択があります。",
+        privacyTitle: "プライバシーポリシー",
+        privacyDate: "最終更新日: 2026年5月4日",
+        privacyNote: "BusyDay Timer は、タイマーデータをデバイス内に保つよう設計されています。",
+        privacyP1: "BusyDay Timer は個人データを収集、販売、共有しません。",
+        privacyP2: "タイマー名、メモ、設定、環境設定、カスタムアラーム音、保存済みタイマーはユーザーのデバイス内に保存され、開発者へ送信されません。",
+        privacyP3: "BusyDay Timer は第三者の分析、広告 SDK、トラッキング SDK、アカウントログインサービスを使用しません。",
+        privacyP4: "iCloud、TestFlight、App Store 購入、クラッシュレポート、Apple Watch 同期などの Apple サービスは Apple によって提供され、Apple のプライバシー慣行の対象です。",
+        privacyP5: "サポートが必要な場合は chanshuowu@icloud.com へ連絡してください。サポートメールに含まれる情報は返信のためだけに使用されます。",
+        privacyP6: "共有画面やロック画面でのプライバシーのため、BusyDay Timer にはタイマー詳細を隠すプライベートなロック画面スナップショットがあります。",
+        screensTitle: "ビジュアルガイド",
+        screensIntro: "BusyDay Timer の主要なサポート項目を示すスクリーンショットです。",
+        shot1Alt: "BusyDay Timer のロック画面スナップショットと Apple Watch の例",
+        shot1Caption: "ロック画面スナップショットと Watch の例",
+        shot2Alt: "BusyDay Timer のロック画面通知操作",
+        shot2Caption: "カスタム音とクイック操作",
+        shot3Alt: "複数タイマーを表示した BusyDay Timer ボード",
+        shot3Caption: "すべてのタイマーを1つのボードで",
+        shot4Alt: "BusyDay Timer のパレット設定",
+        shot4Caption: "タイマーパレット",
+        shot5Alt: "BusyDay Timer のプライバシーと静音モード設定",
+        shot5Caption: "プライベートと静音の設定",
+        shot6Alt: "BusyDay Timer のホイールピッカーと保存済みタイマー",
+        shot6Caption: "素早いタイマー設定",
+        shot7Alt: "BusyDay Timer の表示スタイル設定",
+        shot7Caption: "表示スタイルとウィジェット",
+        shot8Alt: "BusyDay Timer の言語設定",
+        shot8Caption: "言語設定",
+        faqTitle: "FAQ",
+        faqIntro: "よくあるサポート質問への短い回答です。",
+        faq1Q: "タイマーを素早く設定するには？",
+        faq1A: "タイマーを長押ししてタイマー設定を開きます。ホイール、クイック時間ボタン、保存済みタイマーブックマークを使えます。",
+        faq2Q: "動作中または鳴っているタイマーを操作するには？",
+        faq2A: "タイマーをタップすると開始または一時停止します。鳴っているタイマーはタップで停止し、終了したタイマーはタップでリセットします。",
+        faq3Q: "タイマーごとに違う音を使えますか？",
+        faq3A: "はい。BusyDay Timer はカスタムアラーム音に対応しており、タイマーごとに自分の通知音を録音できます。",
+        faq4Q: "通知を控えめにするには？",
+        faq4A: "静音モードをオンにすると、より控えめな通知になります。Apple Watch では Watch 本体の消音モードを使ってください。",
+        faq5Q: "ロック画面でタイマー詳細を隠せますか？",
+        faq5A: "はい。タスク名を見せたくない場合は、プライベートなロック画面スナップショットを使ってください。",
+        faq6Q: "BusyDay Timer は複数の言語に対応していますか？",
+        faq6A: "はい。App 内で対応言語をいつでも切り替えられます。",
+        contactTitle: "サポートに連絡",
+        contactIntro: "BusyDay Timer のサポートが必要な場合は、iPhone のモデル、iOS バージョン、BusyDay Timer のバージョン、起きた内容の短い説明を含めてください。",
+        contactPrivacy: "サポートメールはリクエストへの返信のためだけに使用されます。",
+        supportLabel: "サポート:",
+        detailsTitle: "App 詳細",
+        detailName: "App 名: BusyDay Timer",
+        detailDeveloper: "開発者: CS Wu",
+        detailCategory: "カテゴリ: 仕事効率化",
+        detailCopyright: "著作権: 2026 Chan Shuo Wu",
+        footerText: "BusyDay Timer サポートページです。ヘルプ、トラブル対応、プライバシー情報、連絡先を掲載しています。"
+      },
+      ko: {
+        pageTitle: "BusyDay Timer 지원",
+        metaDescription: "BusyDay Timer 지원 페이지입니다. 여러 타이머, 잠금 화면 알림, Apple Watch 동작, 위젯, 조용한 모드, 사용자 지정 소리, 개인정보 설정을 안내합니다.",
+        navAria: "지원 페이지 탐색",
+        brand: "BusyDay Timer 지원",
+        languageLabel: "언어",
+        navQuickHelp: "빠른 도움말",
+        navHowTo: "사용 방법",
+        navTroubleshooting: "문제 해결",
+        navPrivacy: "개인정보",
+        navFaq: "FAQ",
+        navContact: "문의",
+        heroEyebrow: "App 지원",
+        heroTitle: "BusyDay Timer",
+        heroLead: "바쁜 날의 여러 작업을 위한 알람 타이머입니다. 하나의 보드에서 관리하고, 잠금 화면에서 상태를 확인하며, 타이머에 주의가 필요할 때 Apple Watch 동작을 사용할 수 있습니다.",
+        appStoreButton: "App Store에서 보기",
+        contactButton: "지원 문의",
+        summaryAria: "App 요약",
+        pillTimers: "여러 타이머",
+        pillLock: "잠금 화면 알림",
+        pillWatch: "Apple Watch 동작",
+        pillPrivacy: "비공개 스냅샷",
+        heroImageAlt: "BusyDay Timer 잠금 화면 스냅샷과 Apple Watch 예시",
+        heroNote: "빠른 도움이 필요하면 빠른 도움말부터 확인하세요. 지원 문의 시 iPhone 모델과 iOS 버전을 함께 보내 주세요.",
+        quickTitle: "빠른 도움말",
+        quickIntro: "하나의 보드에서 여러 타이머와 메모를 관리하세요. 대부분의 사용자가 먼저 찾는 기능입니다.",
+        quickNote: "BusyDay Timer는 iPhone에서 완전히 사용할 수 있습니다. Apple Watch는 손목 알림과 빠른 동작을 더해 줍니다.",
+        quickTimerTitle: "타이머 설정",
+        quickTimerBody: "타이머를 길게 눌러 타이머 설정을 여세요. 휠과 북마크를 사용하면 타이머를 빠르게 설정할 수 있습니다.",
+        quickLockTitle: "잠금 화면",
+        quickLockBody: "iPhone이 잠겨 있어도 타이머 상태를 확인할 수 있습니다. 타이머가 울리면 알림에서 멈추거나 시간을 추가하세요.",
+        quickWatchTitle: "Apple Watch",
+        quickWatchBody: "Apple Watch에서 다음 타이머를 확인하세요. 타이머가 울리면 멈추거나 시간을 추가할 수 있습니다.",
+        quickSoundsTitle: "사용자 지정 소리",
+        quickSoundsBody: "각 타이머마다 직접 알람 소리를 녹음하여 서로 다른 알림을 사용할 수 있습니다.",
+        quickQuietTitle: "조용한 모드",
+        quickQuietBody: "공유 공간에서는 조용한 모드를 켜서 더 부드러운 알림을 사용하세요. Apple Watch에서는 시계 자체의 무음 모드를 사용하세요.",
+        quickWidgetsTitle: "위젯",
+        quickWidgetsBody: "타이머 위젯을 추가하면 앱을 열지 않고도 홈 화면에서 타이머를 확인할 수 있습니다.",
+        howTitle: "사용 방법",
+        howIntro: "기본 흐름은 간단합니다. 타이머를 설정하고, 보드를 보이게 두고, 주의가 필요할 때 빠르게 제어하세요.",
+        howStep1Title: "타이머 설정",
+        howStep1Body: "타이머를 길게 눌러 타이머 설정을 엽니다. 휠 선택기, 빠른 시간 버튼, 저장된 북마크를 사용하세요.",
+        howStep2Title: "타이머 제어",
+        howStep2Body: "타이머를 탭하면 시작하거나 일시 정지합니다. 울리는 타이머를 탭하면 멈춥니다. 끝난 타이머를 탭하면 재설정합니다.",
+        howStep3Title: "저장된 타이머 사용",
+        howStep3Body: "자주 쓰는 타이머 설정을 북마크로 저장한 다음 같은 타이머가 필요할 때 불러오세요.",
+        howStep4Title: "상태를 계속 확인",
+        howStep4Body: "타이머를 시작하고 iPhone을 잠근 다음 잠금 화면 스냅샷에 타이머 보드가 나타나는지 확인하세요.",
+        howStep5Title: "보드 조정",
+        howStep5Body: "표시 설정에서 스냅샷 스타일, 보드 모양, 팔레트, 타이머 제목을 비공개로 둘지 선택하세요.",
+        lockTitle: "잠금 화면, Apple Watch 및 위젯",
+        lockIntro: "BusyDay Timer는 앱을 계속 열 수 없는 순간을 위해 만들어졌습니다.",
+        lockCardTitle: "잠금 화면 스냅샷",
+        lockCardBody: "iPhone이 잠겨 있을 때 스냅샷으로 타이머 상태를 확인하세요. 스냅샷 버튼이 보이면 일시 정지, 재개, 중지 또는 시간 추가가 가능합니다.",
+        watchCardTitle: "Apple Watch",
+        watchCardBody: "Apple Watch를 사용한다면 타이머가 활성 상태일 때 스마트 스택의 타이머 보기와 동작 버튼을 확인하세요.",
+        widgetCardTitle: "홈 화면 위젯",
+        widgetCardBody: "위젯을 추가하려면 홈 화면을 길게 누르고 편집을 탭한 다음 위젯 추가를 탭하고 BusyDay Timer를 검색하세요.",
+        troubleTitle: "문제 해결",
+        troubleIntro: "지원 문의 전에 다음 항목을 확인해 보세요. 타이머, 잠금 화면, Watch, 소리, 위젯, 언어 문제를 다룹니다.",
+        troubleLockTitle: "잠금 화면 스냅샷이 보이지 않음",
+        troubleLockBody: "타이머를 하나 이상 시작하고 iPhone을 잠근 뒤 잠시 기다리세요. 그래도 보이지 않으면 iOS 설정에서 BusyDay Timer의 실시간 현황과 알림이 허용되어 있는지 확인하세요.",
+        troubleWatchTitle: "Apple Watch 컨트롤이 나타나지 않음",
+        troubleWatchBody: "iPhone 앱이 설치되어 있고 Watch가 페어링되어 있는지 확인하세요. iPhone에서 타이머를 시작한 다음 Apple Watch의 스마트 스택 또는 타이머 알림을 확인하세요.",
+        troubleSoundTitle: "알림이 너무 크거나 작음",
+        troubleSoundBody: "더 부드러운 알림에는 조용한 모드를 사용하세요. Watch 알림은 Apple Watch 무음 모드나 Watch 설정의 햅틱을 조정하세요.",
+        troubleWidgetTitle: "위젯이 즉시 업데이트되지 않음",
+        troubleWidgetBody: "iOS가 위젯 새로 고침 시점을 제어합니다. BusyDay Timer를 한 번 열고 타이머가 실행 중인지 확인한 다음 잠시 기다리세요.",
+        troublePrivateTitle: "타이머 세부 정보가 잠금 화면에 표시됨",
+        troublePrivateBody: "잠금 화면이나 공유 화면에 작업 이름을 보이고 싶지 않다면 표시 설정을 열고 비공개 스냅샷 스타일을 선택하세요.",
+        troubleLanguageTitle: "잘못된 언어가 표시됨",
+        troubleLanguageBody: "앱의 언어 메뉴에서 시스템 기본값 또는 특정 언어를 선택하세요. 이 지원 페이지에도 상단에 별도의 언어 선택기가 있습니다.",
+        privacyTitle: "개인정보 처리방침",
+        privacyDate: "마지막 업데이트: 2026년 5월 4일",
+        privacyNote: "BusyDay Timer는 타이머 데이터를 기기 안에 보관하도록 설계되었습니다.",
+        privacyP1: "BusyDay Timer는 개인 데이터를 수집, 판매 또는 공유하지 않습니다.",
+        privacyP2: "타이머 이름, 메모, 설정, 환경설정, 사용자 지정 알람 소리, 저장된 타이머는 사용자의 기기에 로컬로 저장되며 개발자에게 전송되지 않습니다.",
+        privacyP3: "BusyDay Timer는 타사 분석, 광고 SDK, 추적 SDK 또는 계정 로그인 서비스를 사용하지 않습니다.",
+        privacyP4: "iCloud, TestFlight, App Store 구입, 충돌 보고서, Apple Watch 동기화와 같은 Apple 서비스는 Apple이 제공하며 Apple의 개인정보 처리 관행이 적용됩니다.",
+        privacyP5: "지원이 필요하면 chanshuowu@icloud.com으로 문의하세요. 지원 이메일에 포함된 정보는 요청에 응답하는 데만 사용됩니다.",
+        privacyP6: "공유 또는 잠긴 화면에서 개인정보를 보호하기 위해 BusyDay Timer는 타이머 세부 정보를 숨기는 비공개 잠금 화면 스냅샷을 제공합니다.",
+        screensTitle: "시각 안내",
+        screensIntro: "BusyDay Timer의 주요 지원 주제를 보여 주는 스크린샷입니다.",
+        shot1Alt: "BusyDay Timer 잠금 화면 스냅샷과 Apple Watch 예시",
+        shot1Caption: "잠금 화면 스냅샷과 Watch 예시",
+        shot2Alt: "BusyDay Timer 잠금 화면 알림 컨트롤",
+        shot2Caption: "사용자 지정 소리와 빠른 동작",
+        shot3Alt: "여러 타이머가 있는 BusyDay Timer 보드",
+        shot3Caption: "모든 타이머를 위한 하나의 보드",
+        shot4Alt: "BusyDay Timer 팔레트 설정",
+        shot4Caption: "타이머 팔레트",
+        shot5Alt: "BusyDay Timer 비공개 및 조용한 모드 설정",
+        shot5Caption: "비공개 및 조용한 설정",
+        shot6Alt: "BusyDay Timer 휠 선택기와 저장된 타이머",
+        shot6Caption: "빠른 타이머 설정",
+        shot7Alt: "BusyDay Timer 표시 스타일 설정",
+        shot7Caption: "표시 스타일과 위젯",
+        shot8Alt: "BusyDay Timer 언어 설정",
+        shot8Caption: "언어 설정",
+        faqTitle: "FAQ",
+        faqIntro: "일반적인 지원 질문에 대한 짧은 답변입니다.",
+        faq1Q: "타이머를 빠르게 설정하려면?",
+        faq1A: "타이머를 길게 눌러 타이머 설정을 여세요. 휠 선택기, 빠른 시간 버튼 또는 저장된 타이머 북마크를 사용할 수 있습니다.",
+        faq2Q: "실행 중이거나 울리는 타이머를 어떻게 제어하나요?",
+        faq2A: "타이머를 탭하면 시작하거나 일시 정지합니다. 울리는 타이머를 탭하면 멈춥니다. 끝난 타이머를 탭하면 재설정합니다.",
+        faq3Q: "타이머마다 다른 소리를 사용할 수 있나요?",
+        faq3A: "예. BusyDay Timer는 사용자 지정 알람 소리를 지원하며 각 타이머마다 직접 알림 소리를 녹음할 수 있습니다.",
+        faq4Q: "알림을 덜 방해되게 하려면?",
+        faq4A: "조용한 모드를 켜면 더 부드러운 알림을 사용할 수 있습니다. Apple Watch에서는 시계 자체의 무음 모드를 사용하세요.",
+        faq5Q: "잠금 화면에서 타이머 세부 정보를 숨길 수 있나요?",
+        faq5A: "예. 다른 사람이 작업 이름을 보지 않게 하려면 비공개 잠금 화면 스냅샷을 사용하세요.",
+        faq6Q: "BusyDay Timer는 여러 언어를 지원하나요?",
+        faq6A: "예. 앱에서 지원 언어를 언제든지 전환할 수 있습니다.",
+        contactTitle: "지원 문의",
+        contactIntro: "BusyDay Timer 도움이 필요하면 iPhone 모델, iOS 버전, BusyDay Timer 버전, 발생한 일에 대한 짧은 설명을 포함해 주세요.",
+        contactPrivacy: "지원 이메일은 요청에 응답하는 데만 사용됩니다.",
+        supportLabel: "지원:",
+        detailsTitle: "App 세부 정보",
+        detailName: "App 이름: BusyDay Timer",
+        detailDeveloper: "개발자: CS Wu",
+        detailCategory: "카테고리: 생산성",
+        detailCopyright: "저작권: 2026 Chan Shuo Wu",
+        footerText: "BusyDay Timer 지원 페이지입니다. 도움말, 문제 해결, 개인정보 정보, 지원 연락처를 제공합니다."
+      },
+      es: {
+        pageTitle: "Soporte de BusyDay Timer",
+        metaDescription: "Página de soporte de BusyDay Timer, un tablero de varios temporizadores con alertas en pantalla bloqueada, Apple Watch, widgets, modo silencioso, sonidos personalizados y privacidad.",
+        navAria: "Navegación de soporte",
+        brand: "Soporte de BusyDay Timer",
+        languageLabel: "Idioma",
+        navQuickHelp: "Ayuda rápida",
+        navHowTo: "Uso",
+        navTroubleshooting: "Solución de problemas",
+        navPrivacy: "Privacidad",
+        navFaq: "FAQ",
+        navContact: "Contacto",
+        heroEyebrow: "Soporte de la app",
+        heroTitle: "BusyDay Timer",
+        heroLead: "Temporizadores con alarma para días ocupados. Contrólalos en un solo tablero, consulta el estado desde la pantalla bloqueada y usa acciones en Apple Watch cuando un temporizador requiere atención.",
+        appStoreButton: "Ver en App Store",
+        contactButton: "Contactar soporte",
+        summaryAria: "Resumen de la app",
+        pillTimers: "Varios temporizadores",
+        pillLock: "Alertas en pantalla bloqueada",
+        pillWatch: "Acciones en Apple Watch",
+        pillPrivacy: "Instantáneas privadas",
+        heroImageAlt: "Instantánea de pantalla bloqueada de BusyDay Timer con varios temporizadores y ejemplo de Apple Watch",
+        heroNote: "¿Necesitas ayuda rápido? Empieza por Ayuda rápida. Si contactas soporte, envía tu modelo de iPhone y versión de iOS.",
+        quickTitle: "Ayuda rápida",
+        quickIntro: "Usa un solo tablero para gestionar varios temporizadores y notas. Estas son las funciones que la mayoría necesita primero.",
+        quickNote: "BusyDay Timer funciona por completo en iPhone. Apple Watch añade alertas en la muñeca y acciones rápidas.",
+        quickTimerTitle: "Configurar un temporizador",
+        quickTimerBody: "Mantén pulsado un temporizador para abrir Ajustes del temporizador. Usa la rueda y los marcadores para configurarlo rápido.",
+        quickLockTitle: "Pantalla bloqueada",
+        quickLockBody: "Cuando tu iPhone está bloqueado, puedes seguir consultando el estado. Cuando suena un temporizador, detenlo o añade tiempo desde la alerta.",
+        quickWatchTitle: "Apple Watch",
+        quickWatchBody: "Consulta el próximo temporizador en Apple Watch. Cuando suena, puedes detenerlo o añadir tiempo extra.",
+        quickSoundsTitle: "Sonidos personalizados",
+        quickSoundsBody: "Graba tu propio sonido de alarma para cada temporizador y usa alertas distintas.",
+        quickQuietTitle: "Modo silencioso",
+        quickQuietBody: "Activa el modo silencioso para alertas más suaves en espacios compartidos. En Apple Watch, usa el modo silencio del reloj.",
+        quickWidgetsTitle: "Widgets",
+        quickWidgetsBody: "Añade widgets para consultar tus temporizadores desde la pantalla de inicio sin abrir la app.",
+        howTitle: "Uso",
+        howIntro: "El flujo principal es simple: configura temporizadores, mantén visible el tablero y usa controles rápidos cuando algo necesita atención.",
+        howStep1Title: "Configura un temporizador",
+        howStep1Body: "Mantén pulsado un temporizador para abrir sus ajustes. Usa la rueda, botones rápidos de duración y marcadores guardados.",
+        howStep2Title: "Controla temporizadores",
+        howStep2Body: "Toca un temporizador para iniciarlo o pausarlo. Toca uno que suena para detenerlo. Toca uno terminado para reiniciarlo.",
+        howStep3Title: "Usa temporizadores guardados",
+        howStep3Body: "Guarda configuraciones frecuentes como marcadores y cárgalas cuando necesites el mismo temporizador.",
+        howStep4Title: "Mantén el estado visible",
+        howStep4Body: "Inicia un temporizador, bloquea tu iPhone y confirma que el tablero aparece en la instantánea de pantalla bloqueada.",
+        howStep5Title: "Ajusta el tablero",
+        howStep5Body: "Usa los ajustes de visualización para elegir estilo de instantánea, apariencia, paletas y si los títulos quedan privados.",
+        lockTitle: "Pantalla bloqueada, Apple Watch y widgets",
+        lockIntro: "BusyDay Timer está creado para momentos en los que no puedes abrir la app constantemente.",
+        lockCardTitle: "Instantánea de pantalla bloqueada",
+        lockCardBody: "Usa la instantánea para consultar el estado mientras tu iPhone está bloqueado. Sus botones pueden pausar, reanudar, detener o añadir tiempo cuando están disponibles.",
+        watchCardTitle: "Apple Watch",
+        watchCardBody: "Si usas Apple Watch, consulta la vista de temporizador en Smart Stack y el botón de acción mientras un temporizador está activo.",
+        widgetCardTitle: "Widgets de pantalla de inicio",
+        widgetCardBody: "Para añadir un widget, mantén pulsada la pantalla de inicio, toca Editar, Añadir widget y busca BusyDay Timer.",
+        troubleTitle: "Solución de problemas",
+        troubleIntro: "Prueba estas comprobaciones antes de contactar soporte. Cubren los problemas más comunes de temporizadores, pantalla bloqueada, Watch, sonido, widgets e idioma.",
+        troubleLockTitle: "La instantánea de pantalla bloqueada no aparece",
+        troubleLockBody: "Inicia al menos un temporizador, bloquea tu iPhone y espera un momento. Si sigue sin aparecer, confirma en Ajustes de iOS que BusyDay Timer tiene permitidas Actividades en Vivo y notificaciones.",
+        troubleWatchTitle: "Los controles de Apple Watch no aparecen",
+        troubleWatchBody: "Mantén instalada la app en iPhone y el reloj enlazado. Inicia un temporizador en iPhone y revisa Smart Stack o la alerta en Apple Watch.",
+        troubleSoundTitle: "Las alertas son demasiado fuertes o suaves",
+        troubleSoundBody: "Usa el modo silencioso para alertas más suaves. Para alertas del Watch, usa el modo silencio de Apple Watch o ajusta la respuesta háptica.",
+        troubleWidgetTitle: "Los widgets no se actualizan al instante",
+        troubleWidgetBody: "iOS controla cuándo se actualizan los widgets. Abre BusyDay Timer una vez, confirma que el temporizador está activo y espera un momento.",
+        troublePrivateTitle: "Los detalles se ven en la pantalla bloqueada",
+        troublePrivateBody: "Abre los ajustes de visualización y elige un estilo de instantánea privada si no quieres que los nombres de tareas se vean en una pantalla bloqueada o compartida.",
+        troubleLanguageTitle: "Se muestra el idioma equivocado",
+        troubleLanguageBody: "Abre el menú de idioma de la app y elige Sistema o un idioma específico. Esta página también tiene su propio selector arriba.",
+        privacyTitle: "Política de privacidad",
+        privacyDate: "Última actualización: 4 de mayo de 2026",
+        privacyNote: "BusyDay Timer está diseñado para mantener tus datos de temporizadores en tu dispositivo.",
+        privacyP1: "BusyDay Timer no recopila, vende ni comparte datos personales.",
+        privacyP2: "Los nombres de temporizadores, notas, ajustes, preferencias, sonidos personalizados y temporizadores guardados se almacenan localmente en el dispositivo del usuario y no se envían al desarrollador.",
+        privacyP3: "BusyDay Timer no usa analíticas de terceros, SDK publicitarios, SDK de seguimiento ni servicios de inicio de sesión.",
+        privacyP4: "Servicios de Apple como iCloud, TestFlight, compras de App Store, informes de fallos y sincronización con Apple Watch son proporcionados por Apple y se rigen por sus prácticas de privacidad.",
+        privacyP5: "Para soporte, contacta chanshuowu@icloud.com. La información incluida en correos de soporte se usa solo para responder la solicitud.",
+        privacyP6: "Para privacidad en pantallas compartidas o bloqueadas, BusyDay Timer incluye instantáneas privadas de pantalla bloqueada para ocultar detalles cuando no quieres que otros vean nombres de tareas.",
+        screensTitle: "Guía visual",
+        screensIntro: "Capturas de BusyDay Timer con los principales temas de soporte.",
+        shot1Alt: "Instantánea de pantalla bloqueada de BusyDay Timer y ejemplo de Apple Watch",
+        shot1Caption: "Instantánea de pantalla bloqueada y Watch",
+        shot2Alt: "Controles de alerta en pantalla bloqueada de BusyDay Timer",
+        shot2Caption: "Sonidos personalizados y acciones rápidas",
+        shot3Alt: "Tablero de BusyDay Timer con varios temporizadores",
+        shot3Caption: "Un tablero para cada temporizador",
+        shot4Alt: "Ajustes de paleta de BusyDay Timer",
+        shot4Caption: "Paletas de temporizador",
+        shot5Alt: "Ajustes privados y modo silencioso de BusyDay Timer",
+        shot5Caption: "Ajustes privados y silenciosos",
+        shot6Alt: "Rueda y temporizadores guardados de BusyDay Timer",
+        shot6Caption: "Configuración rápida",
+        shot7Alt: "Ajustes de estilo de visualización de BusyDay Timer",
+        shot7Caption: "Estilos y widgets",
+        shot8Alt: "Ajustes de idioma de BusyDay Timer",
+        shot8Caption: "Ajustes de idioma",
+        faqTitle: "FAQ",
+        faqIntro: "Respuestas breves a preguntas comunes.",
+        faq1Q: "¿Cómo configuro un temporizador rápido?",
+        faq1A: "Mantén pulsado un temporizador para abrir Ajustes. Usa la rueda, botones rápidos o carga un marcador guardado.",
+        faq2Q: "¿Cómo controlo un temporizador activo o sonando?",
+        faq2A: "Toca un temporizador para iniciarlo o pausarlo. Toca uno que suena para detenerlo. Toca uno terminado para reiniciarlo.",
+        faq3Q: "¿Puedo usar sonidos diferentes para cada temporizador?",
+        faq3A: "Sí. BusyDay Timer admite sonidos de alarma personalizados, incluida la grabación de tu propio sonido para cada temporizador.",
+        faq4Q: "¿Cómo hago que las alertas molesten menos?",
+        faq4A: "Activa el modo silencioso para alertas más suaves. En Apple Watch, usa el modo silencio del reloj.",
+        faq5Q: "¿Puedo ocultar detalles en la pantalla bloqueada?",
+        faq5A: "Sí. Usa instantáneas privadas para ocultar detalles cuando no quieres que otros vean nombres de tareas.",
+        faq6Q: "¿BusyDay Timer admite varios idiomas?",
+        faq6A: "Sí. La app permite cambiar entre idiomas compatibles en cualquier momento.",
+        contactTitle: "Contactar soporte",
+        contactIntro: "Si necesitas ayuda con BusyDay Timer, incluye tu modelo de iPhone, versión de iOS, versión de BusyDay Timer y una breve descripción de lo ocurrido.",
+        contactPrivacy: "Los correos de soporte se usan solo para responder tu solicitud.",
+        supportLabel: "Soporte:",
+        detailsTitle: "Detalles de la app",
+        detailName: "Nombre de la app: BusyDay Timer",
+        detailDeveloper: "Desarrollador: CS Wu",
+        detailCategory: "Categoría: Productividad",
+        detailCopyright: "Copyright: 2026 Chan Shuo Wu",
+        footerText: "Página de soporte de BusyDay Timer con ayuda, solución de problemas, privacidad y contacto."
+      },
+      fr: {
+        pageTitle: "Assistance BusyDay Timer",
+        metaDescription: "Page d’assistance de BusyDay Timer, un tableau de minuteurs avec alertes sur écran verrouillé, Apple Watch, widgets, mode silencieux, sons personnalisés et confidentialité.",
+        navAria: "Navigation d’assistance",
+        brand: "Assistance BusyDay Timer",
+        languageLabel: "Langue",
+        navQuickHelp: "Aide rapide",
+        navHowTo: "Utilisation",
+        navTroubleshooting: "Dépannage",
+        navPrivacy: "Confidentialité",
+        navFaq: "FAQ",
+        navContact: "Contact",
+        heroEyebrow: "Assistance de l’app",
+        heroTitle: "BusyDay Timer",
+        heroLead: "Minuteurs avec alarme pour les journées chargées. Gérez-les sur un seul tableau, consultez l’état depuis l’écran verrouillé et utilisez les actions Apple Watch quand un minuteur demande votre attention.",
+        appStoreButton: "Voir sur l’App Store",
+        contactButton: "Contacter l’assistance",
+        summaryAria: "Résumé de l’app",
+        pillTimers: "Plusieurs minuteurs",
+        pillLock: "Alertes écran verrouillé",
+        pillWatch: "Actions Apple Watch",
+        pillPrivacy: "Aperçus privés",
+        heroImageAlt: "Aperçu de l’écran verrouillé BusyDay Timer avec plusieurs minuteurs et exemple Apple Watch",
+        heroNote: "Besoin d’aide rapidement ? Commencez par l’aide rapide, puis indiquez le modèle d’iPhone et la version d’iOS si vous contactez l’assistance.",
+        quickTitle: "Aide rapide",
+        quickIntro: "Utilisez un seul tableau pour gérer plusieurs minuteurs et notes. Voici les fonctions les plus utiles au départ.",
+        quickNote: "BusyDay Timer fonctionne entièrement sur iPhone. Apple Watch ajoute des alertes au poignet et des actions rapides.",
+        quickTimerTitle: "Régler un minuteur",
+        quickTimerBody: "Maintenez un minuteur appuyé pour ouvrir ses réglages. Utilisez la molette et les signets pour régler rapidement vos minuteurs.",
+        quickLockTitle: "Écran verrouillé",
+        quickLockBody: "Même lorsque l’iPhone est verrouillé, vous pouvez consulter l’état du minuteur. Lorsqu’il sonne, arrêtez-le ou ajoutez du temps depuis l’alerte.",
+        quickWatchTitle: "Apple Watch",
+        quickWatchBody: "Consultez le prochain minuteur sur Apple Watch. Lorsqu’un minuteur sonne, vous pouvez l’arrêter ou ajouter du temps.",
+        quickSoundsTitle: "Sons personnalisés",
+        quickSoundsBody: "Enregistrez votre propre son d’alarme pour chaque minuteur afin d’utiliser des alertes différentes.",
+        quickQuietTitle: "Mode silencieux",
+        quickQuietBody: "Activez le mode silencieux pour des alertes plus discrètes dans les espaces partagés. Sur Apple Watch, utilisez le mode silencieux de la montre.",
+        quickWidgetsTitle: "Widgets",
+        quickWidgetsBody: "Ajoutez des widgets pour consulter vos minuteurs depuis l’écran d’accueil sans ouvrir l’app.",
+        howTitle: "Utilisation",
+        howIntro: "Le flux principal est simple : réglez les minuteurs, gardez le tableau visible et utilisez les commandes rapides quand un élément demande votre attention.",
+        howStep1Title: "Régler un minuteur",
+        howStep1Body: "Maintenez un minuteur appuyé pour ouvrir ses réglages. Utilisez la molette, les boutons de durée rapide et les signets enregistrés.",
+        howStep2Title: "Contrôler les minuteurs",
+        howStep2Body: "Touchez un minuteur pour le démarrer ou le mettre en pause. Touchez un minuteur qui sonne pour l’arrêter. Touchez un minuteur terminé pour le réinitialiser.",
+        howStep3Title: "Utiliser les minuteurs enregistrés",
+        howStep3Body: "Enregistrez les réglages fréquents comme signets, puis chargez-les quand vous avez besoin du même minuteur.",
+        howStep4Title: "Garder l’état visible",
+        howStep4Body: "Lancez un minuteur, verrouillez votre iPhone et vérifiez que le tableau apparaît dans l’aperçu de l’écran verrouillé.",
+        howStep5Title: "Ajuster le tableau",
+        howStep5Body: "Utilisez les réglages d’affichage pour choisir le style d’aperçu, l’apparence, les palettes et si les titres restent privés.",
+        lockTitle: "Écran verrouillé, Apple Watch et widgets",
+        lockIntro: "BusyDay Timer est conçu pour les moments où vous ne pouvez pas rouvrir l’app sans cesse.",
+        lockCardTitle: "Aperçu de l’écran verrouillé",
+        lockCardBody: "Utilisez l’aperçu pour consulter l’état lorsque l’iPhone est verrouillé. Les boutons peuvent mettre en pause, reprendre, arrêter ou ajouter du temps lorsqu’ils sont disponibles.",
+        watchCardTitle: "Apple Watch",
+        watchCardBody: "Si vous utilisez Apple Watch, consultez la vue du minuteur dans le Smart Stack et le bouton d’action lorsqu’un minuteur est actif.",
+        widgetCardTitle: "Widgets d’écran d’accueil",
+        widgetCardBody: "Pour ajouter un widget, maintenez l’écran d’accueil, touchez Modifier, Ajouter un widget, puis recherchez BusyDay Timer.",
+        troubleTitle: "Dépannage",
+        troubleIntro: "Essayez ces vérifications avant de contacter l’assistance. Elles couvrent les problèmes courants de minuteurs, écran verrouillé, Watch, son, widgets et langue.",
+        troubleLockTitle: "L’aperçu de l’écran verrouillé n’apparaît pas",
+        troubleLockBody: "Lancez au moins un minuteur, verrouillez l’iPhone et attendez un instant. S’il manque toujours, vérifiez dans Réglages iOS que les activités en direct et notifications sont autorisées pour BusyDay Timer.",
+        troubleWatchTitle: "Les commandes Apple Watch n’apparaissent pas",
+        troubleWatchBody: "Gardez l’app installée sur l’iPhone et la montre jumelée. Lancez un minuteur sur iPhone, puis vérifiez le Smart Stack ou l’alerte sur Apple Watch.",
+        troubleSoundTitle: "Les alertes sont trop fortes ou trop discrètes",
+        troubleSoundBody: "Utilisez le mode silencieux pour des alertes plus douces. Pour la Watch, utilisez le mode silencieux d’Apple Watch ou ajustez les vibrations.",
+        troubleWidgetTitle: "Les widgets ne se mettent pas à jour immédiatement",
+        troubleWidgetBody: "iOS contrôle la fréquence de mise à jour des widgets. Ouvrez BusyDay Timer une fois, confirmez que le minuteur fonctionne, puis attendez un moment.",
+        troublePrivateTitle: "Les détails s’affichent sur l’écran verrouillé",
+        troublePrivateBody: "Ouvrez les réglages d’affichage et choisissez un style d’aperçu privé lorsque vous ne voulez pas afficher les noms de tâches sur un écran verrouillé ou partagé.",
+        troubleLanguageTitle: "La mauvaise langue s’affiche",
+        troubleLanguageBody: "Ouvrez le menu Langue de l’app et choisissez le système par défaut ou une langue précise. Cette page possède aussi son propre sélecteur en haut.",
+        privacyTitle: "Politique de confidentialité",
+        privacyDate: "Dernière mise à jour : 4 mai 2026",
+        privacyNote: "BusyDay Timer est conçu pour garder vos données de minuteurs sur votre appareil.",
+        privacyP1: "BusyDay Timer ne collecte, ne vend ni ne partage de données personnelles.",
+        privacyP2: "Les noms de minuteurs, notes, réglages, préférences, sons personnalisés et minuteurs enregistrés sont stockés localement sur l’appareil de l’utilisateur et ne sont pas envoyés au développeur.",
+        privacyP3: "BusyDay Timer n’utilise pas d’analytique tierce, SDK publicitaire, SDK de suivi ni service de connexion de compte.",
+        privacyP4: "Les services Apple comme iCloud, TestFlight, les achats App Store, les rapports de crash et la synchronisation Apple Watch sont fournis par Apple et soumis aux pratiques de confidentialité d’Apple.",
+        privacyP5: "Pour l’assistance, contactez chanshuowu@icloud.com. Les informations incluses dans les e-mails d’assistance servent uniquement à répondre à la demande.",
+        privacyP6: "Pour la confidentialité sur les écrans partagés ou verrouillés, BusyDay Timer inclut des aperçus privés afin de masquer les détails des minuteurs.",
+        screensTitle: "Guide visuel",
+        screensIntro: "Captures de BusyDay Timer présentant les principaux sujets d’assistance.",
+        shot1Alt: "Aperçu écran verrouillé BusyDay Timer et exemple Apple Watch",
+        shot1Caption: "Aperçu écran verrouillé et Watch",
+        shot2Alt: "Commandes d’alerte écran verrouillé BusyDay Timer",
+        shot2Caption: "Sons personnalisés et actions rapides",
+        shot3Alt: "Tableau BusyDay Timer avec plusieurs minuteurs",
+        shot3Caption: "Un tableau pour chaque minuteur",
+        shot4Alt: "Réglages de palette BusyDay Timer",
+        shot4Caption: "Palettes de minuteurs",
+        shot5Alt: "Réglages privés et mode silencieux BusyDay Timer",
+        shot5Caption: "Réglages privés et silencieux",
+        shot6Alt: "Molette et minuteurs enregistrés BusyDay Timer",
+        shot6Caption: "Réglage rapide",
+        shot7Alt: "Réglages de style d’affichage BusyDay Timer",
+        shot7Caption: "Styles d’affichage et widgets",
+        shot8Alt: "Réglages de langue BusyDay Timer",
+        shot8Caption: "Réglages de langue",
+        faqTitle: "FAQ",
+        faqIntro: "Réponses courtes aux questions fréquentes.",
+        faq1Q: "Comment régler rapidement un minuteur ?",
+        faq1A: "Maintenez un minuteur appuyé pour ouvrir ses réglages. Utilisez la molette, les boutons de durée rapide ou chargez un signet enregistré.",
+        faq2Q: "Comment contrôler un minuteur actif ou qui sonne ?",
+        faq2A: "Touchez un minuteur pour le démarrer ou le mettre en pause. Touchez un minuteur qui sonne pour l’arrêter. Touchez un minuteur terminé pour le réinitialiser.",
+        faq3Q: "Puis-je utiliser différents sons pour différents minuteurs ?",
+        faq3A: "Oui. BusyDay Timer prend en charge les sons d’alarme personnalisés, y compris l’enregistrement de votre propre son pour chaque minuteur.",
+        faq4Q: "Comment rendre les alertes moins gênantes ?",
+        faq4A: "Activez le mode silencieux pour des alertes plus discrètes. Sur Apple Watch, utilisez le mode silencieux de la montre.",
+        faq5Q: "Peut-on masquer les détails sur l’écran verrouillé ?",
+        faq5A: "Oui. Utilisez les aperçus privés pour masquer les détails lorsque vous ne voulez pas afficher les noms de tâches.",
+        faq6Q: "BusyDay Timer prend-il en charge plusieurs langues ?",
+        faq6A: "Oui. L’app permet de changer de langue prise en charge à tout moment.",
+        contactTitle: "Contacter l’assistance",
+        contactIntro: "Si vous avez besoin d’aide avec BusyDay Timer, indiquez le modèle d’iPhone, la version d’iOS, la version de BusyDay Timer et une brève description du problème.",
+        contactPrivacy: "Les e-mails d’assistance servent uniquement à répondre à votre demande.",
+        supportLabel: "Assistance :",
+        detailsTitle: "Détails de l’app",
+        detailName: "Nom de l’app : BusyDay Timer",
+        detailDeveloper: "Développeur : CS Wu",
+        detailCategory: "Catégorie : Productivité",
+        detailCopyright: "Copyright : 2026 Chan Shuo Wu",
+        footerText: "Page d’assistance BusyDay Timer pour l’aide, le dépannage, la confidentialité et le contact."
+      },
+      de: {
+        pageTitle: "BusyDay Timer Support",
+        metaDescription: "Supportseite für BusyDay Timer, ein Mehrfach-Timer-Board mit Sperrbildschirm-Alarmen, Apple Watch Aktionen, Widgets, leisem Modus, eigenen Tönen und Datenschutz.",
+        navAria: "Support-Navigation",
+        brand: "BusyDay Timer Support",
+        languageLabel: "Sprache",
+        navQuickHelp: "Schnellhilfe",
+        navHowTo: "Anleitung",
+        navTroubleshooting: "Fehlerbehebung",
+        navPrivacy: "Datenschutz",
+        navFaq: "FAQ",
+        navContact: "Kontakt",
+        heroEyebrow: "App Support",
+        heroTitle: "BusyDay Timer",
+        heroLead: "Alarm-Timer für volle Tage. Verwalte sie auf einem Board, prüfe den Status auf dem Sperrbildschirm und nutze Apple Watch Aktionen, wenn ein Timer Aufmerksamkeit braucht.",
+        appStoreButton: "Im App Store ansehen",
+        contactButton: "Support kontaktieren",
+        summaryAria: "App-Übersicht",
+        pillTimers: "Mehrere Timer",
+        pillLock: "Sperrbildschirm-Alarme",
+        pillWatch: "Apple Watch Aktionen",
+        pillPrivacy: "Private Snapshots",
+        heroImageAlt: "BusyDay Timer Sperrbildschirm-Snapshot mit mehreren Timern und Apple Watch Beispiel",
+        heroNote: "Brauchst du schnelle Hilfe? Starte mit der Schnellhilfe. Sende bei Kontakt dein iPhone Modell und die iOS Version mit.",
+        quickTitle: "Schnellhilfe",
+        quickIntro: "Verwalte mehrere Timer und Notizen auf einem einzigen Board. Diese Funktionen brauchen die meisten zuerst.",
+        quickNote: "BusyDay Timer funktioniert vollständig auf dem iPhone. Apple Watch ergänzt Alarme am Handgelenk und Schnellaktionen.",
+        quickTimerTitle: "Timer einstellen",
+        quickTimerBody: "Halte einen Timer gedrückt, um die Timer-Einstellungen zu öffnen. Nutze das Rad und Lesezeichen, um Timer schnell einzustellen.",
+        quickLockTitle: "Sperrbildschirm",
+        quickLockBody: "Wenn dein iPhone gesperrt ist, kannst du den Timer-Status weiter sehen. Wenn ein Timer klingelt, stoppe ihn oder füge Zeit direkt aus dem Alarm hinzu.",
+        quickWatchTitle: "Apple Watch",
+        quickWatchBody: "Prüfe den nächsten Timer auf Apple Watch. Wenn ein Timer klingelt, kannst du ihn stoppen oder Zusatzzeit hinzufügen.",
+        quickSoundsTitle: "Eigene Töne",
+        quickSoundsBody: "Nimm für jeden Timer deinen eigenen Alarmton auf, damit verschiedene Timer unterschiedliche Hinweise nutzen.",
+        quickQuietTitle: "Leiser Modus",
+        quickQuietBody: "Aktiviere den leisen Modus für sanftere Hinweise in gemeinsamen Räumen. Auf Apple Watch verwende den Lautlosmodus der Uhr.",
+        quickWidgetsTitle: "Widgets",
+        quickWidgetsBody: "Füge Timer-Widgets hinzu, um deine Timer vom Home-Bildschirm zu prüfen, ohne die App zu öffnen.",
+        howTitle: "Anleitung",
+        howIntro: "Der Ablauf ist einfach: Timer einstellen, Board sichtbar halten und Schnellsteuerung nutzen, wenn etwas Aufmerksamkeit braucht.",
+        howStep1Title: "Timer einstellen",
+        howStep1Body: "Halte einen Timer gedrückt, um die Timer-Einstellungen zu öffnen. Nutze Rad, Schnellzeit-Tasten und gespeicherte Lesezeichen.",
+        howStep2Title: "Timer steuern",
+        howStep2Body: "Tippe auf einen Timer, um ihn zu starten oder zu pausieren. Tippe auf einen klingelnden Timer, um ihn zu stoppen. Tippe auf einen beendeten Timer, um ihn zurückzusetzen.",
+        howStep3Title: "Gespeicherte Timer nutzen",
+        howStep3Body: "Speichere häufige Timer-Einstellungen als Lesezeichen und lade sie, wenn du denselben Timer wieder brauchst.",
+        howStep4Title: "Status sichtbar halten",
+        howStep4Body: "Starte einen Timer, sperre dein iPhone und prüfe, ob das Timer-Board im Sperrbildschirm-Snapshot erscheint.",
+        howStep5Title: "Board anpassen",
+        howStep5Body: "Wähle in den Anzeigeeinstellungen Snapshot-Stil, Board-Darstellung, Paletten und ob Timer-Titel privat bleiben.",
+        lockTitle: "Sperrbildschirm, Apple Watch und Widgets",
+        lockIntro: "BusyDay Timer ist für Momente gemacht, in denen du die App nicht ständig öffnen kannst.",
+        lockCardTitle: "Sperrbildschirm-Snapshot",
+        lockCardBody: "Nutze den Snapshot, um den Timer-Status bei gesperrtem iPhone zu prüfen. Snapshot-Tasten können pausieren, fortsetzen, stoppen oder Zeit hinzufügen, wenn sie verfügbar sind.",
+        watchCardTitle: "Apple Watch",
+        watchCardBody: "Wenn du Apple Watch nutzt, prüfe die Timer-Ansicht im Smart Stapel und die Aktionstaste, während ein Timer aktiv ist.",
+        widgetCardTitle: "Home-Bildschirm-Widgets",
+        widgetCardBody: "Um ein Widget hinzuzufügen, halte den Home-Bildschirm gedrückt, tippe auf Bearbeiten, Widget hinzufügen und suche nach BusyDay Timer.",
+        troubleTitle: "Fehlerbehebung",
+        troubleIntro: "Probiere diese Checks vor dem Kontakt mit dem Support. Sie decken häufige Probleme mit Timern, Sperrbildschirm, Watch, Ton, Widgets und Sprache ab.",
+        troubleLockTitle: "Sperrbildschirm-Snapshot ist nicht sichtbar",
+        troubleLockBody: "Starte mindestens einen Timer, sperre dein iPhone und warte kurz. Wenn der Snapshot fehlt, prüfe in den iOS Einstellungen, ob Live-Aktivitäten und Mitteilungen für BusyDay Timer erlaubt sind.",
+        troubleWatchTitle: "Apple Watch Steuerung erscheint nicht",
+        troubleWatchBody: "Lass die iPhone App installiert und die Watch gekoppelt. Starte einen Timer auf dem iPhone und prüfe dann Smart Stapel oder Timer-Alarm auf Apple Watch.",
+        troubleSoundTitle: "Alarme sind zu laut oder zu leise",
+        troubleSoundBody: "Nutze den leisen Modus für sanftere Hinweise. Für Watch-Alarme nutze den Lautlosmodus der Apple Watch oder passe Haptik in den Watch-Einstellungen an.",
+        troubleWidgetTitle: "Widgets aktualisieren nicht sofort",
+        troubleWidgetBody: "iOS steuert die Widget-Aktualisierung. Öffne BusyDay Timer einmal, prüfe, ob der Timer läuft, und gib dem Widget einen Moment.",
+        troublePrivateTitle: "Timer-Details erscheinen auf dem Sperrbildschirm",
+        troublePrivateBody: "Öffne Anzeigeeinstellungen und wähle einen privaten Snapshot-Stil, wenn Aufgabennamen nicht auf einem gesperrten oder geteilten Bildschirm sichtbar sein sollen.",
+        troubleLanguageTitle: "Falsche Sprache wird angezeigt",
+        troubleLanguageBody: "Öffne das Sprachmenü der App und wähle Systemstandard oder eine bestimmte Sprache. Diese Supportseite hat oben auch einen eigenen Sprachwähler.",
+        privacyTitle: "Datenschutzrichtlinie",
+        privacyDate: "Zuletzt aktualisiert: 4. Mai 2026",
+        privacyNote: "BusyDay Timer ist so gestaltet, dass deine Timer-Daten lokal auf deinem Gerät bleiben.",
+        privacyP1: "BusyDay Timer sammelt, verkauft oder teilt keine personenbezogenen Daten.",
+        privacyP2: "Timer-Namen, Notizen, Einstellungen, Vorlieben, eigene Alarmtöne und gespeicherte Timer werden lokal auf dem Gerät des Nutzers gespeichert und nicht an den Entwickler gesendet.",
+        privacyP3: "BusyDay Timer verwendet keine Drittanbieter-Analysen, Werbe-SDKs, Tracking-SDKs oder Konto-Login-Dienste.",
+        privacyP4: "Apple Dienste wie iCloud, TestFlight, App Store Käufe, Absturzberichte und Apple Watch Synchronisierung werden von Apple bereitgestellt und unterliegen Apples Datenschutzpraktiken.",
+        privacyP5: "Für Support kontaktiere chanshuowu@icloud.com. Informationen in Support-E-Mails werden nur zur Beantwortung der Anfrage verwendet.",
+        privacyP6: "Für Privatsphäre auf geteilten oder gesperrten Bildschirmen enthält BusyDay Timer private Sperrbildschirm-Snapshots, um Timer-Details zu verbergen.",
+        screensTitle: "Visueller Leitfaden",
+        screensIntro: "Screenshots aus BusyDay Timer mit den wichtigsten Support-Themen.",
+        shot1Alt: "BusyDay Timer Sperrbildschirm-Snapshot und Apple Watch Beispiel",
+        shot1Caption: "Sperrbildschirm-Snapshot und Watch",
+        shot2Alt: "BusyDay Timer Sperrbildschirm-Alarmsteuerung",
+        shot2Caption: "Eigene Töne und Schnellaktionen",
+        shot3Alt: "BusyDay Timer Board mit mehreren Timern",
+        shot3Caption: "Ein Board für jeden Timer",
+        shot4Alt: "BusyDay Timer Paletteneinstellungen",
+        shot4Caption: "Timer-Paletten",
+        shot5Alt: "BusyDay Timer private und leise Einstellungen",
+        shot5Caption: "Privat und leise",
+        shot6Alt: "BusyDay Timer Rad und gespeicherte Timer",
+        shot6Caption: "Schnelle Timer-Einrichtung",
+        shot7Alt: "BusyDay Timer Anzeigeeinstellungen",
+        shot7Caption: "Anzeigestile und Widgets",
+        shot8Alt: "BusyDay Timer Spracheinstellungen",
+        shot8Caption: "Spracheinstellungen",
+        faqTitle: "FAQ",
+        faqIntro: "Kurze Antworten auf häufige Supportfragen.",
+        faq1Q: "Wie stelle ich schnell einen Timer ein?",
+        faq1A: "Halte einen Timer gedrückt, um Timer-Einstellungen zu öffnen. Nutze Rad, Schnellzeit-Tasten oder ein gespeichertes Timer-Lesezeichen.",
+        faq2Q: "Wie steuere ich einen laufenden oder klingelnden Timer?",
+        faq2A: "Tippe auf einen Timer, um ihn zu starten oder zu pausieren. Tippe auf einen klingelnden Timer, um ihn zu stoppen. Tippe auf einen beendeten Timer, um ihn zurückzusetzen.",
+        faq3Q: "Kann ich verschiedene Töne für verschiedene Timer verwenden?",
+        faq3A: "Ja. BusyDay Timer unterstützt eigene Alarmtöne, einschließlich Aufnahme eines eigenen Tons für jeden Timer.",
+        faq4Q: "Wie mache ich Alarme weniger störend?",
+        faq4A: "Aktiviere den leisen Modus für sanftere Hinweise. Auf Apple Watch verwende den Lautlosmodus der Uhr.",
+        faq5Q: "Können Timer-Details auf dem Sperrbildschirm verborgen werden?",
+        faq5A: "Ja. Nutze private Sperrbildschirm-Snapshots, wenn andere deine Aufgabennamen nicht sehen sollen.",
+        faq6Q: "Unterstützt BusyDay Timer mehrere Sprachen?",
+        faq6A: "Ja. Die App lässt dich jederzeit zwischen unterstützten Sprachen wechseln.",
+        contactTitle: "Support kontaktieren",
+        contactIntro: "Wenn du Hilfe mit BusyDay Timer brauchst, sende dein iPhone Modell, die iOS Version, die BusyDay Timer Version und eine kurze Beschreibung des Problems.",
+        contactPrivacy: "Support-E-Mails werden nur zur Beantwortung deiner Anfrage verwendet.",
+        supportLabel: "Support:",
+        detailsTitle: "App-Details",
+        detailName: "App-Name: BusyDay Timer",
+        detailDeveloper: "Entwickler: CS Wu",
+        detailCategory: "Kategorie: Produktivität",
+        detailCopyright: "Copyright: 2026 Chan Shuo Wu",
+        footerText: "BusyDay Timer Supportseite für Hilfe, Fehlerbehebung, Datenschutzinformationen und Kontakt."
+      },
+      pt: {
+        pageTitle: "Suporte do BusyDay Timer",
+        metaDescription: "Página de suporte do BusyDay Timer, um painel de vários timers com alertas na tela bloqueada, Apple Watch, widgets, Modo Silencioso, sons personalizados e privacidade.",
+        navAria: "Navegação de suporte",
+        brand: "Suporte do BusyDay Timer",
+        languageLabel: "Idioma",
+        navQuickHelp: "Ajuda rápida",
+        navHowTo: "Como usar",
+        navTroubleshooting: "Solução de problemas",
+        navPrivacy: "Privacidade",
+        navFaq: "FAQ",
+        navContact: "Contato",
+        heroEyebrow: "Suporte do app",
+        heroTitle: "BusyDay Timer",
+        heroLead: "Vários timers de alarme para dias corridos. Gerencie tudo em um painel, veja o status na tela bloqueada e use ações no Apple Watch quando um timer precisar de atenção.",
+        appStoreButton: "Ver na App Store",
+        contactButton: "Contatar suporte",
+        summaryAria: "Resumo do app",
+        pillTimers: "Vários timers",
+        pillLock: "Alertas na tela bloqueada",
+        pillWatch: "Ações no Apple Watch",
+        pillPrivacy: "Snapshots privados",
+        heroImageAlt: "Snapshot da tela bloqueada do BusyDay Timer com vários timers e exemplo no Apple Watch",
+        heroNote: "Precisa de ajuda rápida? Comece pela Ajuda rápida. Ao contatar o suporte, envie o modelo do iPhone e a versão do iOS.",
+        quickTitle: "Ajuda rápida",
+        quickIntro: "Use um painel para gerenciar vários timers e notas. Estes são os recursos que a maioria precisa primeiro.",
+        quickNote: "BusyDay Timer funciona completamente no iPhone. Apple Watch adiciona alertas no pulso e ações rápidas.",
+        quickTimerTitle: "Definir um timer",
+        quickTimerBody: "Pressione e segure um timer para abrir os Ajustes do Timer. Use a roda e os favoritos para definir timers rapidamente.",
+        quickLockTitle: "Tela bloqueada",
+        quickLockBody: "Mesmo com o iPhone bloqueado, você ainda pode ver o status do timer. Quando tocar, pare ou adicione tempo pelo alerta.",
+        quickWatchTitle: "Apple Watch",
+        quickWatchBody: "Veja o próximo timer no Apple Watch. Quando um timer tocar, você pode pará-lo ou adicionar mais tempo.",
+        quickSoundsTitle: "Sons personalizados",
+        quickSoundsBody: "Grave seu próprio som de alarme para cada timer e use alertas diferentes.",
+        quickQuietTitle: "Modo Silencioso",
+        quickQuietBody: "Ative o Modo Silencioso para alertas mais suaves em espaços compartilhados. No Apple Watch, use o Modo Silencioso do relógio.",
+        quickWidgetsTitle: "Widgets",
+        quickWidgetsBody: "Adicione widgets de timer para ver seus timers na Tela Inicial sem abrir o app.",
+        howTitle: "Como usar",
+        howIntro: "O fluxo principal é simples: defina timers, mantenha o painel visível e use controles rápidos quando algo precisar de atenção.",
+        howStep1Title: "Defina um timer",
+        howStep1Body: "Pressione e segure um timer para abrir os Ajustes. Use a roda, botões rápidos de duração e favoritos salvos.",
+        howStep2Title: "Controle timers",
+        howStep2Body: "Toque em um timer para iniciar ou pausar. Toque em um timer tocando para parar. Toque em um timer concluído para redefinir.",
+        howStep3Title: "Use timers salvos",
+        howStep3Body: "Salve configurações comuns como favoritos e carregue quando precisar do mesmo timer novamente.",
+        howStep4Title: "Mantenha o status visível",
+        howStep4Body: "Inicie um timer, bloqueie o iPhone e confirme que o painel aparece no snapshot da tela bloqueada.",
+        howStep5Title: "Ajuste o painel",
+        howStep5Body: "Use os ajustes de Exibição para escolher estilo do snapshot, aparência, paletas e se os títulos ficam privados.",
+        lockTitle: "Tela Bloqueada, Apple Watch e widgets",
+        lockIntro: "BusyDay Timer foi feito para momentos em que você não pode ficar abrindo o app.",
+        lockCardTitle: "Snapshot da Tela Bloqueada",
+        lockCardBody: "Use o snapshot para verificar o status enquanto o iPhone está bloqueado. Botões do snapshot podem pausar, retomar, parar ou adicionar tempo quando disponíveis.",
+        watchCardTitle: "Apple Watch",
+        watchCardBody: "Se usar Apple Watch, veja a visualização de timer no Conjunto Inteligente e o botão de ação enquanto um timer estiver ativo.",
+        widgetCardTitle: "Widgets da Tela Inicial",
+        widgetCardBody: "Para adicionar um widget, toque e segure a Tela Inicial, toque em Editar, Adicionar Widget e procure BusyDay Timer.",
+        troubleTitle: "Solução de problemas",
+        troubleIntro: "Tente estas verificações antes de contatar o suporte. Elas cobrem problemas comuns de timer, Tela Bloqueada, Watch, som, widgets e idioma.",
+        troubleLockTitle: "Snapshot da tela bloqueada não aparece",
+        troubleLockBody: "Inicie pelo menos um timer, bloqueie o iPhone e espere um momento. Se ainda não aparecer, confirme nos Ajustes do iOS que Atividades ao Vivo e notificações estão permitidas para BusyDay Timer.",
+        troubleWatchTitle: "Controles do Apple Watch não aparecem",
+        troubleWatchBody: "Mantenha o app no iPhone instalado e o relógio emparelhado. Inicie um timer no iPhone e veja o Conjunto Inteligente ou alerta no Apple Watch.",
+        troubleSoundTitle: "Alertas muito altos ou baixos",
+        troubleSoundBody: "Use o Modo Silencioso para alertas mais suaves. Para alertas do Watch, use o Modo Silencioso do Apple Watch ou ajuste a resposta tátil.",
+        troubleWidgetTitle: "Widgets não atualizam imediatamente",
+        troubleWidgetBody: "O iOS controla quando widgets atualizam. Abra BusyDay Timer uma vez, confirme que o timer está rodando e aguarde um momento.",
+        troublePrivateTitle: "Detalhes aparecem na tela bloqueada",
+        troublePrivateBody: "Abra os ajustes de Exibição e escolha um estilo de snapshot privado quando não quiser nomes de tarefas visíveis em tela bloqueada ou compartilhada.",
+        troubleLanguageTitle: "Idioma errado aparece",
+        troubleLanguageBody: "Abra o menu de idioma do app e escolha Padrão do Sistema ou um idioma específico. Esta página também tem seu próprio seletor no topo.",
+        privacyTitle: "Política de Privacidade",
+        privacyDate: "Última atualização: 4 de maio de 2026",
+        privacyNote: "BusyDay Timer foi projetado para manter seus dados de timer no dispositivo.",
+        privacyP1: "BusyDay Timer não coleta, vende nem compartilha dados pessoais.",
+        privacyP2: "Nomes de timers, notas, ajustes, preferências, sons personalizados e timers salvos ficam armazenados localmente no dispositivo do usuário e não são enviados ao desenvolvedor.",
+        privacyP3: "BusyDay Timer não usa análise de terceiros, SDKs de publicidade, SDKs de rastreamento ou serviços de login.",
+        privacyP4: "Serviços da Apple como iCloud, TestFlight, compras da App Store, relatórios de falha e sincronização com Apple Watch são fornecidos pela Apple e seguem as práticas de privacidade da Apple.",
+        privacyP5: "Para suporte, contate chanshuowu@icloud.com. Informações incluídas em emails de suporte são usadas apenas para responder à solicitação.",
+        privacyP6: "Para privacidade em telas compartilhadas ou bloqueadas, BusyDay Timer inclui snapshots privados da Tela Bloqueada para ocultar detalhes do timer.",
+        screensTitle: "Guia visual",
+        screensIntro: "Capturas do BusyDay Timer mostrando os principais tópicos de suporte.",
+        shot1Alt: "Snapshot da Tela Bloqueada do BusyDay Timer e exemplo no Apple Watch",
+        shot1Caption: "Snapshot da Tela Bloqueada e Watch",
+        shot2Alt: "Controles de alerta na Tela Bloqueada do BusyDay Timer",
+        shot2Caption: "Sons personalizados e ações rápidas",
+        shot3Alt: "Painel BusyDay Timer com vários timers",
+        shot3Caption: "Um painel para todos os timers",
+        shot4Alt: "Ajustes de paleta do BusyDay Timer",
+        shot4Caption: "Paletas de timer",
+        shot5Alt: "Ajustes privados e Modo Silencioso do BusyDay Timer",
+        shot5Caption: "Ajustes privados e silenciosos",
+        shot6Alt: "Roda e timers salvos do BusyDay Timer",
+        shot6Caption: "Configuração rápida de timer",
+        shot7Alt: "Ajustes de estilo do BusyDay Timer",
+        shot7Caption: "Estilos de exibição e widgets",
+        shot8Alt: "Ajustes de idioma do BusyDay Timer",
+        shot8Caption: "Ajustes de idioma",
+        faqTitle: "FAQ",
+        faqIntro: "Respostas curtas para perguntas comuns.",
+        faq1Q: "Como defino um timer rapidamente?",
+        faq1A: "Pressione e segure um timer para abrir os Ajustes. Use a roda, botões rápidos ou carregue um favorito salvo.",
+        faq2Q: "Como controlo um timer rodando ou tocando?",
+        faq2A: "Toque em um timer para iniciar ou pausar. Toque em um timer tocando para parar. Toque em um timer concluído para redefinir.",
+        faq3Q: "Posso usar sons diferentes para timers diferentes?",
+        faq3A: "Sim. BusyDay Timer oferece sons personalizados, incluindo gravar seu próprio alerta para cada timer.",
+        faq4Q: "Como deixo os alertas menos incômodos?",
+        faq4A: "Ative o Modo Silencioso para alertas mais suaves. No Apple Watch, use o Modo Silencioso do relógio.",
+        faq5Q: "É possível ocultar detalhes na tela bloqueada?",
+        faq5A: "Sim. Use snapshots privados da Tela Bloqueada quando não quiser que outros vejam nomes de tarefas.",
+        faq6Q: "BusyDay Timer oferece vários idiomas?",
+        faq6A: "Sim. O app permite alternar entre idiomas compatíveis a qualquer momento.",
+        contactTitle: "Contatar suporte",
+        contactIntro: "Se precisar de ajuda com BusyDay Timer, inclua modelo do iPhone, versão do iOS, versão do BusyDay Timer e uma breve descrição do ocorrido.",
+        contactPrivacy: "Emails de suporte são usados apenas para responder à solicitação.",
+        supportLabel: "Suporte:",
+        detailsTitle: "Detalhes do app",
+        detailName: "Nome do app: BusyDay Timer",
+        detailDeveloper: "Desenvolvedor: CS Wu",
+        detailCategory: "Categoria: Produtividade",
+        detailCopyright: "Copyright: 2026 Chan Shuo Wu",
+        footerText: "Página de suporte do BusyDay Timer para ajuda, solução de problemas, privacidade e contato."
+      },
+      ru: {
+        pageTitle: "Поддержка BusyDay Timer",
+        metaDescription: "Страница поддержки BusyDay Timer: доска нескольких таймеров, экран блокировки, Apple Watch, виджеты, тихий режим, свои звуки и приватность.",
+        navAria: "Навигация поддержки",
+        brand: "Поддержка BusyDay Timer",
+        languageLabel: "Язык",
+        navQuickHelp: "Быстрая помощь",
+        navHowTo: "Как использовать",
+        navTroubleshooting: "Проблемы",
+        navPrivacy: "Конфиденциальность",
+        navFaq: "FAQ",
+        navContact: "Контакты",
+        heroEyebrow: "Поддержка приложения",
+        heroTitle: "BusyDay Timer",
+        heroLead: "Несколько таймеров-сигналов для загруженных дней. Управляйте ими на одной доске, смотрите статус на экране блокировки и используйте действия Apple Watch, когда таймер требует внимания.",
+        appStoreButton: "Открыть в App Store",
+        contactButton: "Написать в поддержку",
+        summaryAria: "Кратко о приложении",
+        pillTimers: "Несколько таймеров",
+        pillLock: "Оповещения на экране блокировки",
+        pillWatch: "Действия Apple Watch",
+        pillPrivacy: "Приватные снимки",
+        heroImageAlt: "Снимок экрана блокировки BusyDay Timer с несколькими таймерами и примером Apple Watch",
+        heroNote: "Нужна быстрая помощь? Начните с быстрой помощи. При обращении укажите модель iPhone и версию iOS.",
+        quickTitle: "Быстрая помощь",
+        quickIntro: "Используйте одну доску, чтобы управлять несколькими таймерами и заметками. Это основные функции для начала.",
+        quickNote: "BusyDay Timer полностью работает на iPhone. Apple Watch добавляет оповещения на запястье и быстрые действия.",
+        quickTimerTitle: "Настроить таймер",
+        quickTimerBody: "Нажмите и удерживайте таймер, чтобы открыть настройки. Используйте колесо и закладки для быстрой настройки.",
+        quickLockTitle: "Экран блокировки",
+        quickLockBody: "Даже когда iPhone заблокирован, можно проверить состояние таймера. Когда таймер звонит, остановите его или добавьте время из оповещения.",
+        quickWatchTitle: "Apple Watch",
+        quickWatchBody: "Проверяйте следующий таймер на Apple Watch. Когда таймер зазвонит, его можно остановить или добавить время.",
+        quickSoundsTitle: "Свои звуки",
+        quickSoundsBody: "Запишите собственный звук будильника для каждого таймера, чтобы использовать разные оповещения.",
+        quickQuietTitle: "Тихий режим",
+        quickQuietBody: "Включите тихий режим для более мягких оповещений в общих пространствах. На Apple Watch используйте бесшумный режим часов.",
+        quickWidgetsTitle: "Виджеты",
+        quickWidgetsBody: "Добавьте виджеты таймеров, чтобы проверять их на экране Домой без открытия приложения.",
+        howTitle: "Как использовать",
+        howIntro: "Основной процесс прост: настройте таймеры, держите доску видимой и используйте быстрые элементы управления, когда нужно внимание.",
+        howStep1Title: "Настройте таймер",
+        howStep1Body: "Нажмите и удерживайте таймер, чтобы открыть настройки. Используйте колесо, быстрые кнопки длительности и сохранённые закладки.",
+        howStep2Title: "Управляйте таймерами",
+        howStep2Body: "Нажмите на таймер, чтобы запустить или поставить на паузу. Нажмите на звонящий таймер, чтобы остановить его. Нажмите на завершённый таймер, чтобы сбросить.",
+        howStep3Title: "Используйте сохранённые таймеры",
+        howStep3Body: "Сохраняйте частые настройки таймера как закладки и загружайте их, когда нужен тот же таймер.",
+        howStep4Title: "Держите статус видимым",
+        howStep4Body: "Запустите таймер, заблокируйте iPhone и убедитесь, что доска таймеров появилась на снимке экрана блокировки.",
+        howStep5Title: "Настройте доску",
+        howStep5Body: "В настройках отображения выберите стиль снимка, вид доски, палитры и должны ли названия таймеров оставаться скрытыми.",
+        lockTitle: "Экран блокировки, Apple Watch и виджеты",
+        lockIntro: "BusyDay Timer создан для моментов, когда невозможно постоянно открывать приложение.",
+        lockCardTitle: "Снимок экрана блокировки",
+        lockCardBody: "Используйте снимок, чтобы проверять статус при заблокированном iPhone. Кнопки снимка могут ставить на паузу, возобновлять, останавливать или добавлять время, когда доступны.",
+        watchCardTitle: "Apple Watch",
+        watchCardBody: "Если вы используете Apple Watch, проверяйте вид таймера в Смарт-стопке и кнопку действия, пока таймер активен.",
+        widgetCardTitle: "Виджеты экрана Домой",
+        widgetCardBody: "Чтобы добавить виджет, нажмите и удерживайте экран Домой, нажмите Изменить, Добавить виджет и найдите BusyDay Timer.",
+        troubleTitle: "Проблемы",
+        troubleIntro: "Попробуйте эти проверки перед обращением в поддержку. Они покрывают частые проблемы с таймерами, экраном блокировки, Watch, звуком, виджетами и языком.",
+        troubleLockTitle: "Снимок экрана блокировки не виден",
+        troubleLockBody: "Запустите хотя бы один таймер, заблокируйте iPhone и подождите. Если снимок не появился, проверьте в настройках iOS, что для BusyDay Timer разрешены Live Activities и уведомления.",
+        troubleWatchTitle: "Управление Apple Watch не появляется",
+        troubleWatchBody: "Оставьте приложение установленным на iPhone и убедитесь, что часы сопряжены. Запустите таймер на iPhone, затем проверьте Смарт-стопку или оповещение на Apple Watch.",
+        troubleSoundTitle: "Оповещения слишком громкие или тихие",
+        troubleSoundBody: "Используйте тихий режим для более мягких оповещений. Для Watch используйте бесшумный режим Apple Watch или настройте тактильные сигналы.",
+        troubleWidgetTitle: "Виджеты не обновляются сразу",
+        troubleWidgetBody: "iOS управляет обновлением виджетов. Откройте BusyDay Timer один раз, убедитесь, что таймер запущен, и подождите немного.",
+        troublePrivateTitle: "Детали таймера видны на экране блокировки",
+        troublePrivateBody: "Откройте настройки отображения и выберите приватный стиль снимка, если не хотите показывать названия задач на заблокированном или общем экране.",
+        troubleLanguageTitle: "Показан неправильный язык",
+        troubleLanguageBody: "Откройте меню языка в приложении и выберите системный язык или конкретный язык. На этой странице также есть отдельный выбор языка сверху.",
+        privacyTitle: "Политика конфиденциальности",
+        privacyDate: "Последнее обновление: 4 мая 2026 г.",
+        privacyNote: "BusyDay Timer создан так, чтобы данные таймеров оставались на вашем устройстве.",
+        privacyP1: "BusyDay Timer не собирает, не продаёт и не передаёт персональные данные.",
+        privacyP2: "Названия таймеров, заметки, настройки, предпочтения, собственные звуки и сохранённые таймеры хранятся локально на устройстве пользователя и не отправляются разработчику.",
+        privacyP3: "BusyDay Timer не использует стороннюю аналитику, рекламные SDK, SDK отслеживания или сервисы входа в аккаунт.",
+        privacyP4: "Сервисы Apple, такие как iCloud, TestFlight, покупки App Store, отчёты о сбоях и синхронизация Apple Watch, предоставляются Apple и регулируются практиками конфиденциальности Apple.",
+        privacyP5: "Для поддержки пишите на chanshuowu@icloud.com. Информация из писем поддержки используется только для ответа на запрос.",
+        privacyP6: "Для приватности на общих или заблокированных экранах BusyDay Timer включает приватные снимки экрана блокировки, скрывающие детали таймеров.",
+        screensTitle: "Визуальное руководство",
+        screensIntro: "Снимки BusyDay Timer с основными темами поддержки.",
+        shot1Alt: "Снимок экрана блокировки BusyDay Timer и пример Apple Watch",
+        shot1Caption: "Снимок экрана блокировки и Watch",
+        shot2Alt: "Управление оповещением BusyDay Timer на экране блокировки",
+        shot2Caption: "Свои звуки и быстрые действия",
+        shot3Alt: "Доска BusyDay Timer с несколькими таймерами",
+        shot3Caption: "Одна доска для всех таймеров",
+        shot4Alt: "Настройки палитры BusyDay Timer",
+        shot4Caption: "Палитры таймеров",
+        shot5Alt: "Приватные настройки и тихий режим BusyDay Timer",
+        shot5Caption: "Приватные и тихие настройки",
+        shot6Alt: "Колесо выбора и сохранённые таймеры BusyDay Timer",
+        shot6Caption: "Быстрая настройка таймера",
+        shot7Alt: "Настройки стиля отображения BusyDay Timer",
+        shot7Caption: "Стили отображения и виджеты",
+        shot8Alt: "Настройки языка BusyDay Timer",
+        shot8Caption: "Настройки языка",
+        faqTitle: "FAQ",
+        faqIntro: "Короткие ответы на частые вопросы поддержки.",
+        faq1Q: "Как быстро настроить таймер?",
+        faq1A: "Нажмите и удерживайте таймер, чтобы открыть настройки. Используйте колесо, быстрые кнопки длительности или сохранённую закладку.",
+        faq2Q: "Как управлять запущенным или звонящим таймером?",
+        faq2A: "Нажмите на таймер, чтобы запустить или поставить на паузу. Нажмите на звонящий таймер, чтобы остановить его. Нажмите на завершённый таймер, чтобы сбросить.",
+        faq3Q: "Можно ли использовать разные звуки для разных таймеров?",
+        faq3A: "Да. BusyDay Timer поддерживает собственные звуки будильника, включая запись своего звука для каждого таймера.",
+        faq4Q: "Как сделать оповещения менее навязчивыми?",
+        faq4A: "Включите тихий режим для более мягких оповещений. На Apple Watch используйте бесшумный режим часов.",
+        faq5Q: "Можно ли скрыть детали таймера на экране блокировки?",
+        faq5A: "Да. Используйте приватные снимки экрана блокировки, когда не хотите показывать названия задач.",
+        faq6Q: "BusyDay Timer поддерживает несколько языков?",
+        faq6A: "Да. В приложении можно в любое время переключаться между поддерживаемыми языками.",
+        contactTitle: "Написать в поддержку",
+        contactIntro: "Если нужна помощь с BusyDay Timer, укажите модель iPhone, версию iOS, версию BusyDay Timer и краткое описание произошедшего.",
+        contactPrivacy: "Письма поддержки используются только для ответа на ваш запрос.",
+        supportLabel: "Поддержка:",
+        detailsTitle: "Сведения о приложении",
+        detailName: "Название: BusyDay Timer",
+        detailDeveloper: "Разработчик: CS Wu",
+        detailCategory: "Категория: Производительность",
+        detailCopyright: "Copyright: 2026 Chan Shuo Wu",
+        footerText: "Страница поддержки BusyDay Timer: помощь, проблемы, конфиденциальность и контакт поддержки."
+      }
+    };
+
+    const screenshotLocaleFolders = {
+      en: "en",
+      "zh-Hans": "zh-Hans",
+      "zh-Hant": "zh-Hant",
+      ja: "ja",
+      ko: "ko",
+      es: "es",
+      fr: "fr",
+      de: "de",
+      pt: "pt",
+      ru: "ru"
+    };
+
+    const supportedLocales = Object.keys(translations);
+    const languageSelect = document.getElementById("language");
+
+    function screenshotPathFor(locale, shotNumber) {
+      const folder = screenshotLocaleFolders[locale] || "en";
+      const number = String(shotNumber).padStart(2, "0");
+      return `images/${folder}/image${number}.jpeg`;
+    }
+
+    function updateScreenshots(locale) {
+      document.querySelectorAll("img[data-shot]").forEach((image) => {
+        const nextSource = screenshotPathFor(locale, image.getAttribute("data-shot"));
+        image.onerror = () => {
+          const fallbackSource = screenshotPathFor("en", image.getAttribute("data-shot"));
+          if (image.getAttribute("src") !== fallbackSource) {
+            image.setAttribute("src", fallbackSource);
+          }
+        };
+        if (image.getAttribute("src") !== nextSource) {
+          image.setAttribute("src", nextSource);
+        }
+      });
+    }
+
+    function normalizeLocale(locale) {
+      if (!locale) return "en";
+      const clean = locale.replace("_", "-");
+      if (translations[clean]) return clean;
+      const lower = clean.toLowerCase();
+      if (lower.startsWith("zh-hant") || lower === "zh-tw" || lower === "zh-hk" || lower === "zh-mo") return "zh-Hant";
+      if (lower.startsWith("zh")) return "zh-Hans";
+      const base = lower.split("-")[0];
+      return supportedLocales.includes(base) ? base : "en";
+    }
+
+    function applyLanguage(locale) {
+      const language = normalizeLocale(locale);
+      const strings = { ...translations.en, ...translations[language] };
+      document.documentElement.lang = language;
+      document.title = strings.pageTitle;
+      const description = document.querySelector("meta[name='description']");
+      if (description) description.setAttribute("content", strings.metaDescription);
+
+      document.querySelectorAll("[data-i18n]").forEach((node) => {
+        const key = node.getAttribute("data-i18n");
+        if (strings[key]) node.textContent = strings[key];
+      });
+
+      document.querySelectorAll("[data-i18n-attr]").forEach((node) => {
+        const pairs = node.getAttribute("data-i18n-attr").split(",");
+        pairs.forEach((pair) => {
+          const [attr, key] = pair.split(":").map((part) => part.trim());
+          if (attr && key && strings[key]) node.setAttribute(attr, strings[key]);
+        });
+      });
+
+      updateScreenshots(language);
+      languageSelect.value = language;
+      localStorage.setItem("busyday-support-language", language);
+    }
+
+    languageSelect.addEventListener("change", (event) => {
+      applyLanguage(event.target.value);
+    });
+
+    const savedLanguage = localStorage.getItem("busyday-support-language");
+    applyLanguage(savedLanguage || normalizeLocale(navigator.language));
+  </script>
 </body>
 </html>
